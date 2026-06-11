@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAL | FIFA 26 Operations Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #050b14; color: #f8fafc; }
+        .match-day { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); border-color: #10b981; }
+        .fifa-gradient { background: linear-gradient(90deg, #db2777 0%, #4f46e5 50%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .dal-border { border-top: 6px solid #0ea5e9; }
+        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(51, 65, 85, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.2s ease, border-color 0.2s ease; }
+        .glass-panel:hover { border-color: rgba(56, 189, 248, 0.3); }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="p-4 md:p-6 min-h-screen dal-border">
+
+    <div class="max-w-[90rem] mx-auto space-y-6">
+        
+        <header class="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-500/20 text-sky-400 border border-sky-500/30 uppercase tracking-widest flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span> Aviation Dept</span>
+                    <span class="text-slate-500 text-xs font-semibold uppercase tracking-widest">Love Field (KDAL)</span>
+                </div>
+                <h1 class="text-4xl font-black text-white tracking-tight flex items-center gap-3">
+                    <span>DAL</span> 
+                    <span class="text-slate-700">|</span> 
+                    <span class="fifa-gradient tracking-tighter drop-shadow-lg">FIFA WORLD CUP 26™</span>
+                </h1>
+            </div>
+
+            <div class="glass-panel p-4 px-6 rounded-2xl flex flex-col sm:flex-row items-center gap-6 sm:gap-10 w-full xl:w-auto">
+                <div class="flex items-center gap-4 w-full sm:w-auto">
+                    <div>
+                        <p class="text-emerald-400 text-[10px] font-bold tracking-widest uppercase mb-0.5">Local Time (CDT)</p>
+                        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-wider font-mono tabular-nums" id="clock-local">--:--:--</h2>
+                        <p class="text-slate-400 text-xs font-medium mt-1" id="date-local">---</p>
+                    </div>
+                </div>
+                <div class="hidden sm:block w-px h-16 bg-slate-700/50"></div>
+                <div class="flex items-center gap-4 w-full sm:w-auto text-left sm:text-right flex-row-reverse sm:flex-row">
+                    <div>
+                        <p class="text-sky-400 text-[10px] font-bold tracking-widest uppercase mb-0.5">Zulu / UTC</p>
+                        <h2 class="text-3xl sm:text-4xl font-black text-slate-300 tracking-wider font-mono tabular-nums" id="clock-utc">--:--:--</h2>
+                        <p class="text-slate-500 text-xs font-medium mt-1" id="date-utc">---</p>
+                    </div>
+                    <div class="text-4xl opacity-80 animate-[spin_60s_linear_infinite]">🌍</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/60 p-2 rounded-2xl border border-slate-800 shadow-lg">
+            <div class="flex items-center gap-2 overflow-x-auto w-full pb-2 md:pb-0 hide-scrollbar" id="date-selector">
+                <button onclick="changeDate('2026-06-12')" id="btn-2026-06-12" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 bg-sky-600 text-white shadow-lg shadow-sky-900/50">Jun 12</button>
+                <button onclick="changeDate('2026-06-13')" id="btn-2026-06-13" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800">Jun 13</button>
+                <button onclick="changeDate('2026-06-14')" id="btn-2026-06-14" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-emerald-400 hover:text-emerald-300 match-day border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2">Jun 14 ⚽</button>
+                <button onclick="changeDate('2026-06-15')" id="btn-2026-06-15" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800">Jun 15</button>
+                <button onclick="changeDate('2026-06-16')" id="btn-2026-06-16" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800">Jun 16</button>
+            </div>
+            
+            <div class="shrink-0 flex gap-2">
+                <label class="cursor-pointer bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-200 py-3 px-5 rounded-xl text-xs font-bold transition-colors flex items-center gap-2 shadow-lg">
+                    <span class="text-sky-400">☁️ Upload Aerocloud CSV</span>
+                    <input type="file" accept=".csv" class="hidden" id="csvUploader" onchange="handleFileUpload(event)">
+                </label>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            <div class="space-y-6 lg:col-span-1">
+                
+                <div class="glass-panel rounded-2xl p-5 border-t-2 border-t-pink-500/50">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400">FIFA Reserved Capacity</h3>
+                        <span class="px-2 py-0.5 bg-pink-500/10 text-pink-400 font-bold text-[9px] uppercase tracking-wider rounded border border-pink-500/20 shadow-[0_0_10px_rgba(219,39,119,0.2)]">MAX 350</span>
+                    </div>
+                    
+                    <div class="relative h-44 w-full flex justify-center items-center">
+                        <canvas id="capacityChart"></canvas>
+                        <div class="absolute flex flex-col items-center justify-center pointer-events-none mt-2">
+                            <span class="text-4xl font-black text-white drop-shadow-md" id="kpi-fifa-spots">0</span>
+                            <span class="text-[9px] text-pink-400 font-bold uppercase tracking-widest mt-1">Spots Used</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-800 space-y-2 text-[11px]">
+                        <div class="flex justify-between items-center bg-slate-800/50 p-1.5 rounded">
+                            <span class="text-slate-400 font-medium">DAL Base Aircraft</span>
+                            <span class="text-slate-200 font-bold">52</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-pink-900/20 border border-pink-500/10 p-1.5 rounded">
+                            <span class="text-slate-400 font-medium">Peak Private FIFA</span>
+                            <span class="text-pink-400 font-bold" id="kpi-fifa-peak-private">0</span>
+                        </div>
+                        <div class="flex justify-between items-center bg-emerald-900/20 border border-emerald-500/10 p-1.5 rounded">
+                            <span class="text-emerald-400 font-bold tracking-widest uppercase">Capacity Remaining</span>
+                            <span class="text-emerald-400 font-black text-sm" id="kpi-fifa-rem">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-5 border-t-2 border-t-emerald-500/50">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Match Status</h3>
+                        <span class="px-2 py-0.5 bg-slate-800 text-slate-300 font-bold text-[9px] uppercase tracking-wider rounded border border-slate-700">AT&T Stadium</span>
+                    </div>
+                    <div class="p-4 bg-gradient-to-br from-emerald-900/40 to-teal-900/10 rounded-xl border border-emerald-500/30 relative overflow-hidden group transition-all duration-300 hover:border-emerald-400">
+                        <div class="absolute -right-4 -bottom-4 text-7xl opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500">⚽</div>
+                        <span class="text-[9px] font-black text-emerald-400 uppercase tracking-widest block mb-1.5">Next Host Match</span>
+                        <p class="text-lg font-black text-white mb-1 flex items-center gap-2 drop-shadow-md">
+                            <img src="https://flagcdn.com/w20/nl.png" alt="NED" class="w-5 shadow-sm rounded-sm"> NED 
+                            <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
+                            <img src="https://flagcdn.com/w20/jp.png" alt="JPN" class="w-5 shadow-sm rounded-sm"> JPN
+                        </p>
+                        <p class="text-xs font-semibold text-emerald-200/70">Sun, June 14 @ 15:00 CDT</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Weather</h3>
+                        <span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 font-bold text-[9px] uppercase tracking-wider rounded border border-blue-500/20 flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span> LIVE</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between bg-gradient-to-br from-sky-900/40 to-slate-900/80 border border-sky-800/30 p-4 rounded-xl mb-4 shadow-inner">
+                        <div>
+                            <div class="text-4xl font-black text-white tracking-tighter drop-shadow-md">85°F</div>
+                            <p class="text-sky-300 font-bold text-sm mt-0.5 drop-shadow">Mostly Cloudy</p>
+                            <p class="text-[11px] text-slate-400 mt-1">Wind: <span class="text-slate-200 font-bold">14 mph (S)</span></p>
+                        </div>
+                        <div class="text-5xl drop-shadow-2xl hover:scale-110 transition-transform cursor-default">⛅</div>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="p-3 bg-black/50 rounded-xl border border-slate-800 hover:border-emerald-500/30 transition-colors">
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">METAR</span>
+                            <p class="font-mono text-[10px] text-emerald-400/90 leading-relaxed">KDAL 111556Z 17012G18KT 10SM SCT045 BKN250 29/21 A2985 RMK AO2</p>
+                        </div>
+                        <div class="p-3 bg-black/50 rounded-xl border border-slate-800 hover:border-amber-500/30 transition-colors">
+                            <span class="text-[9px] font-black text-slate-500 uppercase tracking-widest block mb-1">TAF</span>
+                            <p class="font-mono text-[10px] text-amber-300/80 leading-relaxed">KDAL 111120Z 1112/1212 18012KT P6SM FEW040 SCT250<br>FM111800 18015G25KT P6SM VCTS SCT040CB BKN150</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 space-y-6">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-sky-500/10 rounded-bl-full transition-transform duration-500 group-hover:scale-[1.5]"></div>
+                        <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase block mb-1">Total Daily Movements</span>
+                        <div class="text-4xl font-black text-white tracking-tighter drop-shadow-md" id="kpi-movements">0</div>
+                        <span class="text-[9px] font-medium text-slate-500 mt-1 block uppercase">Comm + Priv + Charter</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group border-l-2 border-l-amber-500/50">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-bl-full transition-transform duration-500 group-hover:scale-[1.5]"></div>
+                        <span class="text-[10px] font-bold text-amber-400 tracking-widest uppercase block mb-1">Peak Volume Hour</span>
+                        <div class="text-2xl font-black text-white tracking-tight mt-1 drop-shadow-md" id="kpi-peak-vol-time">00:00</div>
+                        <span class="text-[10px] font-bold text-amber-500 mt-1 block uppercase bg-amber-500/10 inline-block px-2 py-0.5 rounded border border-amber-500/20" id="kpi-peak-vol-count">0 ops/hr</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full transition-transform duration-500 group-hover:scale-[1.5]"></div>
+                        <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase block mb-1">Total Arrivals</span>
+                        <div class="text-4xl font-black text-emerald-400 tracking-tighter drop-shadow-md" id="kpi-arr-total">0</div>
+                        <span class="text-[9px] font-medium text-slate-500 mt-1 block uppercase">Scheduled for today</span>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-slate-500/10 rounded-bl-full transition-transform duration-500 group-hover:scale-[1.5]"></div>
+                        <span class="text-[10px] font-bold text-slate-400 tracking-widest uppercase block mb-1">Total Departures</span>
+                        <div class="text-4xl font-black text-slate-300 tracking-tighter drop-shadow-md" id="kpi-dep-total">0</div>
+                        <span class="text-[9px] font-medium text-slate-500 mt-1 block uppercase">Scheduled for today</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl p-6 border-t-2 border-t-sky-500/50">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-white tracking-tight" id="chart-title">Movement vs. Capacity Timeline</h3>
+                            <p class="text-xs font-medium text-slate-400 mt-1" id="chart-subtitle">Total operations overlaid with <span class="text-pink-400 font-bold">FIFA Private Reservation</span> ground occupancy.</p>
+                        </div>
+                        <div class="flex bg-slate-900/80 p-1.5 rounded-xl border border-slate-700 shadow-inner">
+                            <button onclick="switchChartTab('overview')" id="tab-btn-overview" class="chart-tab-btn px-5 py-2 text-xs font-bold rounded-lg bg-sky-600 text-white transition-all shadow-md">Overview</button>
+                            <button onclick="switchChartTab('arrivals')" id="tab-btn-arrivals" class="chart-tab-btn px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all">Arrivals</button>
+                            <button onclick="switchChartTab('departures')" id="tab-btn-departures" class="chart-tab-btn px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition-all">Departures</button>
+                        </div>
+                    </div>
+                    <div class="h-[22rem] relative w-full">
+                        <canvas id="hourlyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-2xl overflow-hidden border-t-2 border-t-slate-700">
+                    <div class="p-5 border-b border-slate-800/80 flex justify-between items-center bg-black/40">
+                        <div>
+                            <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">Daily Operations Log: Team Charters</h3>
+                            <p class="text-[11px] font-medium text-slate-400 mt-1">Filtering active team ramp operations (drops/departures) for the selected date</p>
+                        </div>
+                        <div class="px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-600 text-[10px] font-bold text-slate-300 shadow-inner uppercase tracking-widest flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Verified
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-900/80 text-slate-400 font-bold border-b border-slate-700/50 text-[10px] tracking-widest uppercase">
+                                    <th class="p-4 pl-6">Tail Number</th>
+                                    <th class="p-4">Aircraft Type</th>
+                                    <th class="p-4">Ramp Action</th>
+                                    <th class="p-4">Time (CDT)</th>
+                                    <th class="p-4">Team Identity</th>
+                                </tr>
+                            </thead>
+                            <tbody id="flight-table-body" class="divide-y divide-slate-800/50 text-slate-200">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Universal Flag Image Engine using reliable SVG/PNG CDN
+        const getTeamFlag = (teamName) => {
+            let code = '';
+            if (teamName.includes('Czechia')) code = 'cz';
+            else if (teamName.includes('Japan')) code = 'jp';
+            else if (teamName.includes('Netherlands')) code = 'nl';
+            else if (teamName.includes('Sweden')) code = 'se';
+            else if (teamName.includes('Croatia')) code = 'hr';
+            else if (teamName.includes('England')) code = 'gb-eng';
+            
+            if(code) {
+                return `<img src="https://flagcdn.com/w20/${code}.png" alt="Flag" class="w-4 h-auto rounded-[2px] shadow-sm inline-block">`;
+            }
+            return '✈️';
+        };
+
+        // Clocks Engine
+        function updateClock() {
+            const now = new Date();
+            const locT = { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const locD = { timeZone: 'America/Chicago', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('clock-local').innerText = now.toLocaleString('en-US', locT);
+            document.getElementById('date-local').innerText = now.toLocaleString('en-US', locD);
+            document.getElementById('clock-utc').innerText = now.toISOString().substring(11, 19);
+            const utcDateOpts = { timeZone: 'UTC', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('date-utc').innerText = now.toLocaleString('en-US', utcDateOpts);
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        // TIMEZONE CORRECTED Aerocloud Commercial Data
+        const commercialData = {
+            "2026-06-12": { "arr": [0,0,0,0,0,0,10,11,12,10,12,13,13,9,11,16,14,13,7,17,13,15,4,8], "dep": [0,0,0,0,0,0,18,18,14,12,15,14,17,13,5,12,18,8,10,12,13,13,4,0] },
+            "2026-06-13": { "arr": [0,0,0,0,0,0,12,7,9,9,10,16,7,14,11,9,9,15,14,16,14,7,3,8], "dep": [0,0,0,0,0,0,14,17,10,12,13,12,16,13,7,13,7,9,14,15,14,9,0,0] },
+            "2026-06-14": { "arr": [0,0,0,0,0,0,10,10,13,8,11,8,14,10,9,12,16,10,9,14,14,19,17,8], "dep": [0,0,0,0,0,0,17,16,14,14,14,10,14,16,5,12,10,13,7,8,13,16,12,0] },
+            "2026-06-15": { "arr": [0,0,0,0,0,0,10,11,12,10,12,13,13,8,11,16,14,14,7,16,13,16,16,8], "dep": [0,0,0,0,0,0,18,19,14,12,15,14,16,13,4,12,18,8,10,13,13,13,9,0] },
+            "2026-06-16": { "arr": [0,0,0,0,0,0,8,12,11,12,8,12,12,12,11,13,15,14,6,18,12,16,9,8], "dep": [0,0,0,0,0,0,15,11,17,14,16,11,14,10,13,11,15,12,13,8,14,15,0,0] },
+            "2026-06-17": { "arr": [0,0,0,0,0,0,8,12,11,12,8,12,12,13,11,13,15,14,6,17,12,16,6,8], "dep": [0,0,0,0,0,0,15,11,17,14,17,11,13,10,13,11,15,12,13,8,14,15,0,0] }
+        };
+
+        const privateFlights = [{"tail":"N15N","arr":"2026-06-12T12:00","dep":"2026-06-14T10:30"},{"tail":"N917HP","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N672HG","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N582VP","arr":"2026-06-15T08:30","dep":"2026-06-18T12:00"},{"tail":"N672HG","arr":"2026-06-15T12:00","dep":"2026-06-15T13:55"},{"tail":"NSISMC N418AM","arr":"2026-06-16T12:00","dep":"2026-06-18T12:00"},{"tail":"N56388","arr":"2026-06-16T12:00","dep":"2026-06-16T19:00"},{"tail":"N522A","arr":"2026-06-16T17:00","dep":"2026-06-18T12:00"},{"tail":"NB88CB","arr":"2026-06-16T07:45","dep":"2026-06-16T12:00"},{"tail":"N4640","arr":"2026-06-17T12:00","dep":"2026-06-18T12:00"},{"tail":"N672HG","arr":"2026-06-15T12:00","dep":"2026-06-17T21:30"},{"tail":"N3BDU","arr":"2026-06-17T12:00","dep":"2026-06-17T12:00"},{"tail":"N56388","arr":"2026-06-17T12:00","dep":"2026-06-17T21:00"},{"tail":"N90081H","arr":"2026-06-17T10:00","dep":"2026-06-17T12:00"},{"tail":"N572HG","arr":"2026-06-17T12:00","dep":"2026-06-18T17:00"},{"tail":"NB5JM","arr":"2026-06-17T12:00","dep":"2026-06-21T16:23"},{"tail":"N888JE","arr":"2026-06-20T12:00","dep":"2026-06-21T12:00"},{"tail":"N176DL","arr":"2026-06-28T12:00","dep":"2026-06-30T17:00"},{"tail":"N741VE","arr":"2026-06-28T12:00","dep":"2026-07-05T12:00"},{"tail":"N464C","arr":"2026-07-06T12:00","dep":"2026-07-07T12:00"},{"tail":"N280TD","arr":"2026-07-06T12:00","dep":"2026-07-06T12:00"},{"tail":"N624GF","arr":"2026-07-12T13:45","dep":"2026-07-15T12:00"},{"tail":"N672HG","arr":"2026-07-12T12:00","dep":"2026-07-12T12:00"},{"tail":"N298AL","arr":"2026-07-13T12:00","dep":"2026-07-14T12:00"},{"tail":"N672HG","arr":"2026-07-14T12:00","dep":"2026-07-15T12:00"},{"tail":"N250DN","arr":"2026-06-16T12:00","dep":"2026-06-17T12:00"},{"tail":"AAY49544956/","arr":"2026-06-14T12:00","dep":"2026-06-14T12:06"},{"tail":"VPCSY","arr":"2026-06-13T14:00","dep":"2026-06-15T12:00"},{"tail":"N403TB","arr":"2026-06-12T12:00","dep":"2026-06-12T13:54"},{"tail":"N681PA","arr":"2026-06-18T12:00","dep":"2026-06-18T12:00"},{"tail":"N681PA","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N605RB","arr":"2026-06-19T12:00","dep":"2026-06-22T12:00"},{"tail":"PRVCO","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N60FP","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N8835","arr":"2026-06-24T12:00","dep":"2026-06-25T12:00"},{"tail":"VPCSY","arr":"2026-06-24T12:00","dep":"2026-06-26T12:00"},{"tail":"VNA298","arr":"2026-07-12T12:00","dep":"2026-07-15T12:00"},{"tail":"VNA-488","arr":"2026-07-13T12:00","dep":"2026-07-14T12:00"},{"tail":"N125YU","arr":"2026-07-13T14:30","dep":"2026-07-15T12:00"},{"tail":"PRIVICO","arr":"2026-07-14T10:00","dep":"2026-07-15T12:00"},{"tail":"VPCFR","arr":"2026-07-14T10:20","dep":"2026-07-14T12:00"},{"tail":"XACCE","arr":"2026-07-14T15:40","dep":"2026-07-15T12:00"},{"tail":"N366LG","arr":"2026-06-14T11:35","dep":"2026-06-14T12:00"},{"tail":"N365LG","arr":"2026-06-16T15:35","dep":"2026-06-18T12:00"},{"tail":"N365LG","arr":"2026-06-21T14:45","dep":"2026-06-22T12:00"},{"tail":"N366LG N6205","arr":"2026-06-15T10:00","dep":"2026-07-15T12:00"},{"tail":"N218HF","arr":"2026-06-26T11:15","dep":"2026-06-27T12:00"},{"tail":"N525MP","arr":"2026-06-13T09:00","dep":"2026-06-13T12:00"},{"tail":"N218HF","arr":"2026-06-14T14:00","dep":"2026-06-16T12:00"},{"tail":"N672HG","arr":"2026-06-25T12:00","dep":"2026-06-26T02:50"},{"tail":"N503KJ N686CB","arr":"2026-06-15T18:30","dep":"2026-06-30T12:00"},{"tail":"N686CB","arr":"2026-06-30T12:00","dep":"2026-06-30T15:25"},{"tail":"N686CB","arr":"2026-07-14T07:45","dep":"2026-07-14T12:00"},{"tail":"N700JM","arr":"2026-07-01T12:00","dep":"2026-07-05T13:14"},{"tail":"NBSJM","arr":"2026-06-15T12:00","dep":"2026-06-15T17:57"},{"tail":"N85JM","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N85JM","arr":"2026-06-16T12:00","dep":"2026-06-16T12:00"},{"tail":"NB5JM","arr":"2026-06-24T12:00","dep":"2026-06-25T12:00"},{"tail":"NBSUM","arr":"2026-06-25T12:00","dep":"2026-06-29T10:36"},{"tail":"VNA488","arr":"2026-07-13T18:45","dep":"2026-07-15T12:00"},{"tail":"VINA799","arr":"2026-07-13T18:45","dep":"2026-07-15T12:00"},{"tail":"VNA499","arr":"2026-07-13T12:00","dep":"2026-07-15T12:00"},{"tail":"N861WD","arr":"2026-06-28T12:00","dep":"2026-06-28T12:00"},{"tail":"N134FM","arr":"2026-06-20T00:26","dep":"2026-06-21T12:00"},{"tail":"N11206 NZFA","arr":"2026-06-13T12:00","dep":"2026-07-16T12:00"},{"tail":"N3251K","arr":"2026-06-25T12:00","dep":"2026-06-26T12:00"},{"tail":"N57888 N159WW","arr":"2026-06-12T12:00","dep":"2026-06-24T16:30"},{"tail":"N837VA","arr":"2026-07-14T12:00","dep":"2026-07-15T12:00"},{"tail":"N947AK","arr":"2026-06-27T12:00","dep":"2026-06-28T12:00"},{"tail":"NOLTAK","arr":"2026-06-25T12:00","dep":"2026-06-25T12:00"},{"tail":"N298AL","arr":"2026-07-13T12:00","dep":"2026-07-15T12:00"},{"tail":"N513AS","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N680LL NOGAP","arr":"2026-06-14T12:00","dep":"2026-06-18T12:00"},{"tail":"OYTAS","arr":"2026-06-25T12:00","dep":"2026-06-26T12:00"},{"tail":"N244JE","arr":"2026-06-27T12:00","dep":"2026-06-28T12:00"},{"tail":"N109JS","arr":"2026-06-25T12:00","dep":"2026-06-25T12:00"},{"tail":"N21568","arr":"2026-07-14T12:00","dep":"2026-07-15T12:00"},{"tail":"N283PH","arr":"2026-06-23T15:44","dep":"2026-06-24T12:00"},{"tail":"N203BZ","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N20362","arr":"2026-06-15T12:00","dep":"2026-06-15T17:20"},{"tail":"N203BZ N203B2","arr":"2026-06-16T16:50","dep":"2026-06-17T12:00"},{"tail":"N20362","arr":"2026-06-18T12:00","dep":"2026-06-18T17:50"},{"tail":"N203BZ","arr":"2026-06-20T12:00","dep":"2026-06-20T18:40"},{"tail":"N203B2","arr":"2026-06-20T12:00","dep":"2026-06-20T12:00"},{"tail":"N20362 N203BZ","arr":"2026-06-21T12:00","dep":"2026-06-22T13:45"},{"tail":"N20362","arr":"2026-06-25T19:45","dep":"2026-06-25T22:45"},{"tail":"N203BZ","arr":"2026-06-26T12:00","dep":"2026-06-26T16:05"},{"tail":"N20382 N244JE","arr":"2026-06-22T10:00","dep":"2026-06-28T12:00"},{"tail":"DANEO","arr":"2026-07-12T12:00","dep":"2026-07-14T12:00"},{"tail":"NBS0EM","arr":"2026-06-14T12:00","dep":"2026-06-15T12:00"},{"tail":"N312HC","arr":"2026-06-23T12:00","dep":"2026-06-23T12:00"},{"tail":"TGFOR","arr":"2026-06-27T12:00","dep":"2026-06-28T12:00"},{"tail":"N2000S","arr":"2026-06-07T15:06","dep":"2026-06-19T12:00"},{"tail":"HALKW","arr":"2026-07-12T12:00","dep":"2026-07-15T12:00"},{"tail":"XACHG N316GN","arr":"2026-06-21T12:00","dep":"2026-07-07T12:00"},{"tail":"N765M","arr":"2026-07-15T12:00","dep":"2026-07-16T12:00"},{"tail":"XAORL","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"XARET","arr":"2026-07-14T12:00","dep":"2026-07-15T12:00"},{"tail":"N8262","arr":"2026-07-13T12:00","dep":"2026-07-15T12:00"},{"tail":"N313AR","arr":"2026-06-26T12:00","dep":"2026-06-27T12:00"},{"tail":"N97DK","arr":"2026-07-14T12:00","dep":"2026-07-14T12:00"},{"tail":"CFJAS","arr":"2026-07-14T12:00","dep":"2026-07-14T12:00"},{"tail":"N55215","arr":"2026-06-13T12:00","dep":"2026-06-13T12:00"},{"tail":"N109.JS","arr":"2026-06-12T12:00","dep":"2026-06-13T12:00"},{"tail":"N109JS","arr":"2026-06-22T12:00","dep":"2026-06-23T12:00"},{"tail":"N1966H","arr":"2026-06-25T12:00","dep":"2026-06-26T12:00"},{"tail":"N1966H","arr":"2026-06-13T12:00","dep":"2026-06-15T12:00"},{"tail":"N7AB","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"NB86EP","arr":"2026-06-15T12:00","dep":"2026-06-17T12:00"},{"tail":"N313AR NOAXS","arr":"2026-06-14T12:00","dep":"2026-06-26T12:00"},{"tail":"NB36JS","arr":"2026-06-23T12:00","dep":"2026-06-23T12:00"},{"tail":"N650W","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N525MP N926JS","arr":"2026-06-10T12:00","dep":"2026-06-19T12:00"},{"tail":"N702NW","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"XALTS","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"NOGBCL","arr":"2026-06-13T12:00","dep":"2026-06-14T12:00"},{"tail":"XAAAN","arr":"2026-07-13T12:00","dep":"2026-07-15T12:00"},{"tail":"N845JS","arr":"2026-06-13T12:00","dep":"2026-06-13T12:00"},{"tail":"N4430C","arr":"2026-06-14T12:00","dep":"2026-06-16T12:00"},{"tail":"N715MN","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N611BV","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N4430C","arr":"2026-06-16T12:00","dep":"2026-06-17T12:00"},{"tail":"N4430C","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N159WW","arr":"2026-06-16T12:00","dep":"2026-06-17T12:00"},{"tail":"XBIXT","arr":"2026-06-20T12:00","dep":"2026-06-22T12:00"},{"tail":"N631CB","arr":"2026-06-13T12:00","dep":"2026-06-13T12:00"},{"tail":"N247RLI","arr":"2026-06-16T12:00","dep":"2026-06-18T12:00"},{"tail":"NBSUM","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N99LM","arr":"2026-06-15T12:00","dep":"2026-06-15T12:00"},{"tail":"N741VE","arr":"2026-06-25T12:00","dep":"2026-06-25T12:00"},{"tail":"N672HG","arr":"2026-06-22T12:00","dep":"2026-06-22T12:00"},{"tail":"N672HG","arr":"2026-07-06T12:00","dep":"2026-07-07T20:08"},{"tail":"N889LV","arr":"2026-06-15T12:00","dep":"2026-06-15T12:00"},{"tail":"NB5JM","arr":"2026-06-29T12:00","dep":"2026-06-29T12:00"},{"tail":"N627HG N31MW","arr":"2026-06-18T12:00","dep":"2026-07-01T12:00"},{"tail":"NS8MW","arr":"2026-07-14T12:00","dep":"2026-07-14T12:00"},{"tail":"CGECG","arr":"2026-06-16T12:00","dep":"2026-06-18T12:00"},{"tail":"N503KJ","arr":"2026-06-28T12:00","dep":"2026-07-01T12:00"},{"tail":"N550WW","arr":"2026-06-12T12:00","dep":"2026-06-14T12:00"},{"tail":"N440JA","arr":"2026-06-12T12:00","dep":"2026-06-12T12:00"},{"tail":"N334PM","arr":"2026-06-13T12:00","dep":"2026-06-13T12:00"},{"tail":"N541FX","arr":"2026-06-14T12:00","dep":"2026-06-15T12:00"},{"tail":"N187CR","arr":"2026-06-14T12:00","dep":"2026-06-15T12:00"},{"tail":"N403TB","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N440LJA","arr":"2026-06-15T12:00","dep":"2026-06-15T12:00"},{"tail":"N665UP","arr":"2026-06-15T12:00","dep":"2026-06-16T12:00"},{"tail":"N331BR","arr":"2026-06-16T10:40","dep":"2026-06-16T12:00"},{"tail":"N790K","arr":"2026-06-16T12:00","dep":"2026-06-18T12:00"},{"tail":"N590MC","arr":"2026-06-17T12:00","dep":"2026-06-17T12:00"},{"tail":"N131AF","arr":"2026-06-18T12:00","dep":"2026-06-18T12:00"},{"tail":"N131AF","arr":"2026-06-19T11:15","dep":"2026-06-19T12:00"},{"tail":"N331BR","arr":"2026-06-18T12:00","dep":"2026-06-19T12:00"},{"tail":"OEHEY","arr":"2026-06-18T12:00","dep":"2026-06-19T12:00"},{"tail":"XAAFX","arr":"2026-06-20T12:00","dep":"2026-06-23T12:00"},{"tail":"NB51GK","arr":"2026-06-21T12:00","dep":"2026-06-21T12:00"},{"tail":"YWORK","arr":"2026-06-21T12:00","dep":"2026-06-21T12:00"},{"tail":"N851GK","arr":"2026-06-27T12:00","dep":"2026-06-27T12:00"},{"tail":"NB1388","arr":"2026-07-01T12:00","dep":"2026-07-01T12:00"},{"tail":"N813BB","arr":"2026-07-02T12:00","dep":"2026-07-02T12:00"},{"tail":"N81388","arr":"2026-07-05T12:00","dep":"2026-07-05T12:00"},{"tail":"NB1388","arr":"2026-07-06T12:00","dep":"2026-07-06T12:00"},{"tail":"N813BB","arr":"2026-07-08T12:00","dep":"2026-07-09T12:00"},{"tail":"N81388","arr":"2026-07-11T12:00","dep":"2026-07-12T12:00"},{"tail":"NB1388","arr":"2026-07-13T12:00","dep":"2026-07-13T12:00"},{"tail":"N267PT","arr":"2026-06-24T12:00","dep":"2026-06-26T12:00"},{"tail":"N2057H","arr":"2026-06-12T12:00","dep":"2026-06-13T12:00"},{"tail":"N458TC","arr":"2026-06-24T12:00","dep":"2026-06-24T12:00"},{"tail":"N125TK","arr":"2026-06-18T12:00","dep":"2026-06-21T12:00"},{"tail":"N502V2","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N58.JE","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N7402","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N130JE","arr":"2026-06-14T12:00","dep":"2026-06-14T12:00"},{"tail":"N736XJ","arr":"2026-06-15T12:00","dep":"2026-06-15T12:00"},{"tail":"N508X","arr":"2026-06-15T03:00","dep":"2026-06-15T12:00"},{"tail":"N356VJ","arr":"2026-06-15T03:50","dep":"2026-06-15T12:00"},{"tail":"N306BH","arr":"2026-06-15T12:00","dep":"2026-06-17T12:00"},{"tail":"N4343F N1876T","arr":"2026-06-16T12:00","dep":"2026-06-16T12:00"},{"tail":"N665M","arr":"2026-06-16T12:00","dep":"2026-06-16T12:00"},{"tail":"XAESE N131.JE","arr":"2026-06-16T12:00","dep":"2026-06-18T12:00"},{"tail":"N131JE","arr":"2026-06-17T12:00","dep":"2026-06-17T12:00"},{"tail":"N267DW","arr":"2026-06-17T12:00","dep":"2026-06-18T12:00"},{"tail":"N501VJ","arr":"2026-06-17T12:00","dep":"2026-06-17T12:00"},{"tail":"N25QT","arr":"2026-06-17T12:00","dep":"2026-06-17T12:00"},{"tail":"N888GB","arr":"2026-06-19T12:00","dep":"2026-06-22T12:00"},{"tail":"N7402","arr":"2026-06-19T12:00","dep":"2026-06-25T12:00"},{"tail":"N948TX","arr":"2026-06-20T12:00","dep":"2026-06-20T12:00"},{"tail":"XALFI","arr":"2026-06-20T12:00","dep":"2026-06-23T12:00"},{"tail":"N286FA","arr":"2026-06-21T12:00","dep":"2026-06-25T12:00"},{"tail":"N214BZ","arr":"2026-06-23T12:00","dep":"2026-06-23T12:00"}];
+
+        const teamCharters = [
+            { tail: "109JS", type: "AeroMexico B737", arr: "2026-06-12T14:35", dep: "2026-06-13T11:00", team: "Czechia" },
+            { tail: "203BZ", type: "Breeze A220", arr: "2026-06-12T18:25", dep: "2026-06-14T19:45", team: "Japan" },
+            { tail: "11206", type: "United B737", arr: "2026-06-13T17:10", dep: "2026-06-15T19:30", team: "Netherlands" },
+            { tail: "109JS", type: "AeroMexico B737", arr: "2026-06-15T15:00", dep: "2026-06-23T11:00", team: "Sweden" },
+            { tail: "203BZ", type: "Breeze A220", arr: "2026-06-15T17:20", dep: "2026-06-16T15:00", team: "Croatia" },
+            { tail: "203BZ", type: "Breeze A220", arr: "2026-06-16T16:50", dep: "2026-06-17T19:45", team: "England" },
+            { tail: "203BZ", type: "Breeze A220", arr: "2026-06-17T19:45", dep: "2026-06-17T22:00", team: "Croatia" },
+            { tail: "203BZ", type: "Breeze A220", arr: "2026-06-18T17:50", dep: "2026-06-18T20:15", team: "Sweden" }
+        ];
+
+        let currentChartInstance = null;
+        let capChartInstance = null;
+        let selectedDateStr = "2026-06-12";
+        let activeTab = 'overview';
+        let actArr = [], actDep = [], fifaGrounded = [];
+
+        const matchDays = ["2026-06-14", "2026-06-17", "2026-06-22", "2026-06-25", "2026-06-27"];
+
+        Chart.defaults.font.family = 'Inter';
+        Chart.defaults.color = '#94a3b8';
+        function initDashboard() { changeDate(selectedDateStr); }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const rows = text.split('\n');
+                if (rows.length < 2) return;
+                const headers = rows[0].split(',');
+                const arrDepIdx = headers.findIndex(h => h.trim() === 'arr_dep');
+                const dateFullIdx = headers.findIndex(h => h.trim() === 'scheduled_date_full');
+                if (arrDepIdx === -1 || dateFullIdx === -1) { alert('Invalid CSV format.'); return; }
+
+                for (let i = 1; i < rows.length; i++) {
+                    const cols = rows[i].split(',');
+                    if (cols.length <= Math.max(arrDepIdx, dateFullIdx)) continue;
+                    const arrDep = cols[arrDepIdx].trim();
+                    const dateStr = cols[dateFullIdx].trim();
+                    if (!dateStr || dateStr === 'nan') continue;
+
+                    try {
+                        const dt = new Date(dateStr);
+                        const dayKey = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+                        if (!commercialData[dayKey]) commercialData[dayKey] = { arr: Array(24).fill(0), dep: Array(24).fill(0) };
+                        if (arrDep === 'A') commercialData[dayKey].arr[dt.getHours()]++;
+                        else if (arrDep === 'D') commercialData[dayKey].dep[dt.getHours()]++;
+                    } catch(err) {}
+                }
+                alert('Aerocloud data imported successfully!');
+                renderDashboard(selectedDateStr);
+            };
+            reader.readAsText(file);
+        }
+
+        function switchChartTab(tab) {
+            activeTab = tab;
+            document.querySelectorAll('.chart-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-400');
+            });
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            activeBtn.classList.remove('text-slate-400');
+            activeBtn.classList.add('bg-sky-600', 'text-white', 'shadow-md');
+            
+            if(tab === 'overview') {
+                document.getElementById('chart-title').innerText = "Movement vs. Capacity Timeline";
+                document.getElementById('chart-subtitle').innerHTML = "Total operations overlaid with <span class='text-pink-400 font-bold'>FIFA Private Reservation</span> ground occupancy.";
+            } else if (tab === 'arrivals') {
+                document.getElementById('chart-title').innerText = "Hourly Arrivals Distribution";
+                document.getElementById('chart-subtitle').innerText = "Total scheduled inbound flights per hour";
+            } else {
+                document.getElementById('chart-title').innerText = "Hourly Departures Distribution";
+                document.getElementById('chart-subtitle').innerText = "Total scheduled outbound flights per hour";
+            }
+            drawHourlyChart();
+        }
+
+        function changeDate(dateString) {
+            selectedDateStr = dateString;
+            document.querySelectorAll('.date-btn').forEach(btn => {
+                const isMatch = matchDays.includes(btn.id.replace('btn-', ''));
+                if(isMatch) btn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-emerald-400 hover:text-emerald-300 match-day border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2";
+                else btn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800";
+            });
+            const activeBtn = document.getElementById(`btn-${dateString}`);
+            if (matchDays.includes(dateString)) activeBtn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-white match-day border border-emerald-400 bg-emerald-600 flex items-center gap-2 shadow-lg shadow-emerald-900/50 scale-105";
+            else activeBtn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 bg-sky-600 text-white shadow-lg shadow-sky-900/50 scale-105";
+            renderDashboard(dateString);
+        }
+
+        function renderDashboard(targetDate) {
+            const dayStart = new Date(`${targetDate}T00:00:00`);
+            const dayEnd = new Date(`${targetDate}T23:59:59`);
+
+            let dynamicArrivals = Array(24).fill(0);
+            let dynamicDepartures = Array(24).fill(0);
+            let privateGrounded = Array(24).fill(0);
+            
+            let dailyTotal = 0, totalArr = 0, totalDep = 0;
+
+            if (commercialData[targetDate]) {
+                for (let i = 0; i < 24; i++) {
+                    dynamicArrivals[i] += commercialData[targetDate].arr[i];
+                    dynamicDepartures[i] += commercialData[targetDate].dep[i];
+                    totalArr += commercialData[targetDate].arr[i];
+                    totalDep += commercialData[targetDate].dep[i];
+                    dailyTotal += commercialData[targetDate].arr[i] + commercialData[targetDate].dep[i];
+                }
+            }
+
+            privateFlights.forEach(flight => {
+                const arrTime = new Date(flight.arr);
+                const depTime = new Date(flight.dep);
+                
+                if (arrTime >= dayStart && arrTime <= dayEnd) { dynamicArrivals[arrTime.getHours()]++; dailyTotal++; totalArr++; }
+                if (depTime >= dayStart && depTime <= dayEnd) { dynamicDepartures[depTime.getHours()]++; dailyTotal++; totalDep++; }
+
+                for (let h = 0; h < 24; h++) {
+                    const checkHour = new Date(`${targetDate}T${String(h).padStart(2, '0')}:00:00`);
+                    if (arrTime <= checkHour && depTime >= checkHour) {
+                        privateGrounded[h]++;
+                    }
+                }
+            });
+
+            let tableHtml = "";
+            teamCharters.forEach(flight => {
+                const arrTime = new Date(flight.arr);
+                const depTime = new Date(flight.dep);
+                
+                const isArrToday = arrTime >= dayStart && arrTime <= dayEnd;
+                const isDepToday = depTime >= dayStart && depTime <= dayEnd;
+
+                if (isArrToday) { dynamicArrivals[arrTime.getHours()]++; dailyTotal++; totalArr++; }
+                if (isDepToday) { dynamicDepartures[depTime.getHours()]++; dailyTotal++; totalDep++; }
+
+                if (isArrToday) {
+                    tableHtml += `
+                        <tr class="hover:bg-slate-800/80 transition-colors group">
+                            <td class="p-4 pl-6 font-mono text-white font-bold group-hover:text-emerald-400 transition-colors">${flight.tail}</td>
+                            <td class="p-4 text-slate-400">${flight.type}</td>
+                            <td class="p-4 text-emerald-400 font-bold flex items-center gap-2"><span class="text-lg">🛬</span> Drop-off</td>
+                            <td class="p-4 font-mono font-medium">${arrTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-[11px] font-black tracking-widest uppercase rounded bg-slate-800 text-slate-200 border border-slate-600 shadow-md flex items-center gap-1.5 w-max">${getTeamFlag(flight.team)} ${flight.team}</span></td>
+                        </tr>`;
+                }
+                if (isDepToday) {
+                    tableHtml += `
+                        <tr class="hover:bg-slate-800/80 transition-colors group">
+                            <td class="p-4 pl-6 font-mono text-white font-bold group-hover:text-amber-400 transition-colors">${flight.tail}</td>
+                            <td class="p-4 text-slate-400">${flight.type}</td>
+                            <td class="p-4 text-amber-400 font-bold flex items-center gap-2"><span class="text-lg">🛫</span> Departure</td>
+                            <td class="p-4 font-mono font-medium">${depTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-[11px] font-black tracking-widest uppercase rounded bg-slate-800 text-slate-200 border border-slate-600 shadow-md flex items-center gap-1.5 w-max">${getTeamFlag(flight.team)} ${flight.team}</span></td>
+                        </tr>`;
+                }
+            });
+
+            if(!tableHtml) tableHtml = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-medium tracking-wide">No scheduled Team Charter operations (drop/go) found for this day.</td></tr>`;
+
+            let maxOps = 0, peakOpsHour = 0;
+            for(let i=0; i<24; i++) {
+                if((dynamicArrivals[i] + dynamicDepartures[i]) > maxOps) { maxOps = dynamicArrivals[i] + dynamicDepartures[i]; peakOpsHour = i; }
+            }
+            
+            const peakPrivateCount = Math.max(...privateGrounded);
+            const constantBaseSpots = 52;
+            const totalUsedSpots = constantBaseSpots + peakPrivateCount;
+            const spotsRemaining = 350 - totalUsedSpots;
+
+            actArr = dynamicArrivals;
+            actDep = dynamicDepartures;
+            fifaGrounded = privateGrounded;
+
+            document.getElementById('kpi-movements').innerText = dailyTotal;
+            document.getElementById('kpi-arr-total').innerText = totalArr;
+            document.getElementById('kpi-dep-total').innerText = totalDep;
+            document.getElementById('kpi-peak-vol-count').innerText = `${maxOps} ops/hr`;
+            document.getElementById('kpi-peak-vol-time').innerText = `${String(peakOpsHour).padStart(2,'0')}:00`;
+            
+            document.getElementById('kpi-fifa-spots').innerText = totalUsedSpots;
+            document.getElementById('kpi-fifa-peak-private').innerText = `+${peakPrivateCount}`;
+            document.getElementById('kpi-fifa-rem').innerText = spotsRemaining;
+            document.getElementById('flight-table-body').innerHTML = tableHtml;
+
+            drawCapacityChart(totalUsedSpots, spotsRemaining);
+            drawHourlyChart();
+        }
+
+        function drawCapacityChart(used, rem) {
+            const ctx = document.getElementById('capacityChart').getContext('2d');
+            if (capChartInstance) capChartInstance.destroy();
+            
+            const isCritical = rem < 50;
+            const ringColor = isCritical ? '#ef4444' : '#db2777';
+
+            capChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Reserved Spots Used', 'Available Capacity'],
+                    datasets: [{
+                        data: [used, rem],
+                        backgroundColor: [ringColor, '#1e293b'],
+                        borderWidth: 0, hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '82%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: c => ` ${c.label}: ${c.raw}` }, backgroundColor: 'rgba(15, 23, 42, 0.9)', padding: 12, cornerRadius: 8 }
+                    }
+                }
+            });
+        }
+
+        function drawHourlyChart() {
+            const ctx = document.getElementById('hourlyChart').getContext('2d');
+            const hoursLabels = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0') + ':00');
+            
+            if (currentChartInstance) currentChartInstance.destroy();
+
+            let datasets = [];
+
+            if (activeTab === 'overview') {
+                datasets = [
+                    { label: 'FIFA Reserved Apron Occupancy', data: fifaGrounded, borderColor: '#db2777', backgroundColor: 'rgba(219, 39, 119, 0.1)', borderWidth: 3, fill: true, tension: 0.4, yAxisID: 'y' },
+                    { type: 'bar', label: 'Total Arrivals', data: actArr, backgroundColor: '#0ea5e9', borderRadius: 4, yAxisID: 'y1' },
+                    { type: 'bar', label: 'Total Departures', data: actDep, backgroundColor: '#64748b', borderRadius: 4, yAxisID: 'y1' }
+                ];
+            } else if (activeTab === 'arrivals') {
+                datasets = [{ type: 'bar', label: 'Hourly Arrivals', data: actArr, backgroundColor: '#10b981', borderRadius: 6, yAxisID: 'y1' }];
+            } else if (activeTab === 'departures') {
+                datasets = [{ type: 'bar', label: 'Hourly Departures', data: actDep, backgroundColor: '#f59e0b', borderRadius: 6, yAxisID: 'y1' }];
+            }
+
+            currentChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: { labels: hoursLabels, datasets: datasets },
+                options: {
+                    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                    plugins: { 
+                        legend: { position: 'top', align: 'end', labels: { boxWidth: 12, usePointStyle: true, font: { weight: 'bold' } } },
+                        tooltip: { backgroundColor: 'rgba(15, 23, 42, 0.9)', titleFont: { size: 14 }, padding: 12, cornerRadius: 8, borderColor: 'rgba(51, 65, 85, 0.5)', borderWidth: 1 }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { font: { size: 10 } } },
+                        y: { display: (activeTab === 'overview'), position: 'left', title: { display: true, text: 'Grounded Aircraft', font: { weight: 'bold', size: 11 } }, grid: { color: 'rgba(51, 65, 85, 0.3)' }, ticks: { stepSize: 1, font: { weight: 'bold' } }, min: 0 },
+                        y1: { position: 'right', title: { display: true, text: 'Hourly Movements', font: { weight: 'bold', size: 11 } }, grid: { drawOnChartArea: false }, ticks: { stepSize: 5 }, min: 0 }
+                    }
+                }
+            });
+        }
+
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>
