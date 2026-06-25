@@ -97,11 +97,11 @@
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/60 p-2 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden group">
             <div class="absolute inset-0 bg-gradient-to-r from-sky-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
             <div class="flex items-center gap-2 overflow-x-auto w-full pb-2 md:pb-0 hide-scrollbar relative z-10" id="date-selector">
-                <button onclick="changeDate('2026-06-24')" id="btn-2026-06-24" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 bg-sky-600 text-white shadow-lg shadow-sky-900/50 scale-105 transform active:scale-95">Jun 24</button>
                 <button onclick="changeDate('2026-06-25')" id="btn-2026-06-25" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-emerald-400 hover:text-emerald-300 match-day border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2 shadow-lg shadow-emerald-900/50 transform hover:scale-105 active:scale-95">Jun 25 ⚽</button>
                 <button onclick="changeDate('2026-06-26')" id="btn-2026-06-26" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800 transform hover:scale-105 active:scale-95">Jun 26</button>
                 <button onclick="changeDate('2026-06-27')" id="btn-2026-06-27" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-emerald-400 hover:text-emerald-300 match-day border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2 shadow-lg shadow-emerald-900/50 transform hover:scale-105 active:scale-95">Jun 27 ⚽</button>
                 <button onclick="changeDate('2026-06-28')" id="btn-2026-06-28" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800 transform hover:scale-105 active:scale-95">Jun 28</button>
+                <button onclick="changeDate('2026-06-29')" id="btn-2026-06-29" class="date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800 transform hover:scale-105 active:scale-95">Jun 29</button>
             </div>
         </div>
 
@@ -143,7 +143,7 @@
                 <div class="glass-panel rounded-2xl p-5 border-t-2 border-t-sky-500/50 group hover:border-sky-500/50 transition-colors">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-sky-300 transition-colors">Live Weather (KDAL)</h3>
-                        <span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 font-bold text-[9px] uppercase tracking-wider rounded border border-blue-500/20 flex items-center gap-1.5 shadow-[0_0_10px_rgba(56,189,248,0.2)]"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span> HRRR FEED</span>
+                        <span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 font-bold text-[9px] uppercase tracking-wider rounded border border-blue-500/20 flex items-center gap-1.5 shadow-[0_0_10px_rgba(56,189,248,0.2)]"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span> LIVE FEED</span>
                     </div>
                     
                     <div class="flex items-center justify-between bg-gradient-to-br from-sky-900/40 to-slate-900/80 border border-sky-800/30 p-4 rounded-xl shadow-inner group-hover:shadow-[inset_0_2px_15px_rgba(56,189,248,0.1)] transition-all duration-300">
@@ -161,15 +161,17 @@
                         <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-emerald-400 transition-colors">Match Status</h3>
                         <span class="px-2 py-0.5 bg-slate-800 text-slate-300 font-bold text-[9px] uppercase tracking-wider rounded border border-slate-700 shadow-inner">AT&T Stadium</span>
                     </div>
-                    <div class="p-4 bg-gradient-to-br from-emerald-900/40 to-teal-900/10 rounded-xl border border-emerald-500/30 relative overflow-hidden transition-all duration-300 group-hover:border-emerald-400 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]">
+                    <div class="p-5 bg-gradient-to-br from-emerald-900/60 to-teal-900/20 rounded-xl border border-emerald-500/40 relative overflow-hidden transition-all duration-500 group-hover:border-emerald-400 group-hover:shadow-[0_0_25px_rgba(16,185,129,0.25)] flex flex-col items-center text-center">
                         <div class="absolute -right-4 -bottom-4 text-7xl opacity-10 group-hover:opacity-20 group-hover:scale-125 transition-all duration-700 group-hover:rotate-12">⚽</div>
-                        <span class="text-[9px] font-black text-emerald-400 uppercase tracking-widest block mb-1.5 alert-strobe">Next Host Match</span>
-                        <p class="text-lg font-black text-white mb-1 flex items-center gap-2 drop-shadow-md relative z-10" id="match-card-content">
-                            <img src="https://flagcdn.com/w20/cz.png" alt="CZE" class="w-5 shadow-sm rounded-sm"> CZE 
-                            <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
-                            <img src="https://flagcdn.com/w20/jp.png" alt="JPN" class="w-5 shadow-sm rounded-sm"> JPN
-                        </p>
-                        <p id="match-card-date" class="text-xs font-semibold text-emerald-200/70 relative z-10 bg-emerald-900/40 inline-block px-2 py-0.5 rounded border border-emerald-500/20 mt-1">Thu, June 25 @ 15:00 CDT</p>
+                        <div class="absolute -left-4 -top-4 text-7xl opacity-10 group-hover:opacity-20 group-hover:scale-125 transition-all duration-700 group-hover:-rotate-12">🏟️</div>
+                        
+                        <span class="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-3 alert-strobe bg-emerald-950/50 px-3 py-1 rounded-full border border-emerald-500/30">Next Host Match</span>
+                        
+                        <div id="match-card-content" class="flex items-center justify-center gap-4 w-full relative z-10 my-2">
+                            </div>
+                        
+                        <p id="match-card-date" class="text-xs font-bold text-emerald-100 relative z-10 bg-black/40 inline-block px-3 py-1.5 rounded-md border border-slate-700/50 mt-4 shadow-inner tracking-wide">
+                            </p>
                     </div>
                 </div>
             </div>
@@ -240,33 +242,6 @@
                     </div>
                 </div>
 
-                <div class="glass-panel rounded-2xl overflow-hidden border-t-2 border-t-slate-700 hover:border-slate-500 transition-colors">
-                    <div class="p-5 border-b border-slate-800/80 flex justify-between items-center bg-black/40">
-                        <div>
-                            <h3 class="text-base font-bold text-white tracking-tight flex items-center gap-2">Daily Operations Log: Team Charters</h3>
-                            <p class="text-[11px] font-medium text-slate-400 mt-1">Filtering active team ramp operations (drops/departures) for the selected date</p>
-                        </div>
-                        <div class="px-3 py-1.5 bg-slate-800/80 rounded-lg border border-slate-600 text-[10px] font-bold text-slate-300 shadow-inner uppercase tracking-widest flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span> Verified
-                        </div>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-sm">
-                            <thead>
-                                <tr class="bg-slate-900/80 text-slate-400 font-bold border-b border-slate-700/50 text-[10px] tracking-widest uppercase">
-                                    <th class="p-4 pl-6">Tail Number</th>
-                                    <th class="p-4">Aircraft Type</th>
-                                    <th class="p-4">Ramp Action</th>
-                                    <th class="p-4">Time (CDT)</th>
-                                    <th class="p-4">Team Identity</th>
-                                </tr>
-                            </thead>
-                            <tbody id="flight-table-body" class="divide-y divide-slate-800/50 text-slate-200">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -302,23 +277,6 @@
         }
         fetchActualWeather();
         setInterval(fetchActualWeather, 300000); 
-
-        // Flag Engine
-        const getTeamFlag = (teamName) => {
-            let code = '';
-            if (teamName.includes('Czechia')) code = 'cz';
-            else if (teamName.includes('Japan')) code = 'jp';
-            else if (teamName.includes('Netherlands')) code = 'nl';
-            else if (teamName.includes('Sweden')) code = 'se';
-            else if (teamName.includes('Croatia')) code = 'hr';
-            if (teamName.includes('England')) code = 'gb-eng';
-            else if (teamName.includes('Austria')) code = 'at';
-            else if (teamName.includes('Argentina')) code = 'ar';
-            else if (teamName.includes('Jordan')) code = 'jo';
-            
-            if(code) return `<img src="https://flagcdn.com/w20/${code}.png" alt="Flag" class="w-4 h-auto rounded-[2px] shadow-sm inline-block border border-slate-700/50">`;
-            return '✈️';
-        };
 
         
         // Sky & Celestial Body Engine (Dallas Local Time)
@@ -387,39 +345,14 @@
 
         // TIMEZONE CORRECTED DEDUPLICATED Aerocloud Commercial Data
         const commercialData = {
-            "2026-06-24": { "arr": [0,0,0,0,0,0,8,12,11,12,8,12,12,13,11,14,15,14,6,17,12,16,6,8], "dep": [0,0,0,0,0,0,15,11,17,14,18,11,13,10,13,11,15,12,13,8,14,15,0,0], "arr_pax": [0,0,0,0,0,0,1171,1778,1575,1676,1034,1687,1737,1616,1602,1682,2036,1835,886,2502,1608,2170,818,1193], "dep_pax": [0,0,0,0,0,0,2145,1462,2505,1874,1989,1443,1822,1451,1759,1561,2165,1605,1846,1174,2055,2186,0,0] },
             "2026-06-25": { "arr": [0, 0, 0, 0, 0, 0, 10, 11, 12, 10, 12, 13, 13, 7, 11, 16, 14, 13, 7, 16, 13, 16, 16, 8], "dep": [0, 0, 0, 0, 0, 0, 18, 18, 14, 12, 14, 14, 16, 13, 4, 12, 18, 8, 10, 12, 13, 13, 9, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1465, 1602, 1775, 1386, 1613, 1822, 1882, 870, 1600, 1814, 1613, 1558, 1029, 2321, 1753, 2192, 587, 1166], "dep_pax": [0, 0, 0, 0, 0, 0, 2595, 2494, 2030, 1611, 1416, 1876, 1954, 1882, 442, 1699, 2461, 1029, 1399, 1745, 1912, 1879, 579, 0] },
             "2026-06-26": {"arr": [0, 0, 0, 0, 0, 0, 10, 11, 12, 11, 12, 13, 13, 8, 11, 16, 14, 14, 7, 17, 13, 15, 4, 8], "dep": [0, 0, 0, 0, 0, 0, 18, 18, 14, 12, 16, 14, 17, 13, 4, 12, 18, 8, 10, 12, 13, 13, 4, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1465, 1602, 1775, 1534, 1613, 1822, 1882, 870, 1600, 1814, 1613, 1706, 1029, 2321, 1745, 2192, 587, 1166], "dep_pax": [0, 0, 0, 0, 0, 0, 2598, 2494, 2030, 1611, 1564, 1876, 1954, 1882, 442, 1699, 2461, 1029, 1399, 1745, 1912, 1879, 579, 0]},
             "2026-06-27": {"arr": [0, 0, 0, 0, 0, 0, 12, 7, 9, 9, 10, 16, 7, 13, 12, 9, 9, 14, 14, 16, 13, 7, 3, 8], "dep": [0, 0, 0, 0, 0, 0, 14, 17, 10, 12, 13, 12, 16, 13, 7, 13, 7, 9, 13, 15, 14, 8, 0, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1769, 1045, 1339, 1251, 1460, 2204, 980, 1885, 1685, 875, 1155, 1839, 2044, 2206, 1901, 1037, 296, 1169], "dep_pax": [0, 0, 0, 0, 0, 0, 2005, 2499, 1325, 1627, 1402, 1581, 2204, 1718, 1007, 1833, 1018, 1317, 1836, 2192, 2066, 1174, 0, 0]},
-            "2026-06-28": {"arr": [0, 0, 0, 0, 0, 0, 10, 10, 13, 7, 12, 7, 14, 10, 10, 12, 16, 10, 9, 14, 14, 19, 16, 8], "dep": [0, 0, 0, 0, 0, 0, 17, 16, 14, 15, 13, 11, 13, 16, 5, 12, 11, 13, 7, 8, 13, 16, 12, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1481, 1451, 1895, 999, 1698, 878, 2051, 1465, 1112, 1330, 2017, 1114, 1308, 2058, 1877, 2485, 719, 1177], "dep_pax": [0, 0, 0, 0, 0, 0, 2445, 2359, 1868, 2046, 1441, 1256, 1618, 2194, 738, 1696, 1454, 1759, 952, 1160, 1921, 2335, 732, 0]}
+            "2026-06-28": {"arr": [0, 0, 0, 0, 0, 0, 10, 10, 13, 7, 12, 7, 14, 10, 10, 12, 16, 10, 9, 14, 14, 19, 16, 8], "dep": [0, 0, 0, 0, 0, 0, 17, 16, 14, 15, 13, 11, 13, 16, 5, 12, 11, 13, 7, 8, 13, 16, 12, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1481, 1451, 1895, 999, 1698, 878, 2051, 1465, 1112, 1330, 2017, 1114, 1308, 2058, 1877, 2485, 719, 1177], "dep_pax": [0, 0, 0, 0, 0, 0, 2445, 2359, 1868, 2046, 1441, 1256, 1618, 2194, 738, 1696, 1454, 1759, 952, 1160, 1921, 2335, 732, 0]},
+            "2026-06-29": {"arr": [0, 0, 0, 0, 0, 0, 10, 11, 12, 9, 13, 12, 13, 8, 12, 15, 14, 13, 7, 16, 13, 16, 16, 8], "dep": [0, 0, 0, 0, 0, 0, 18, 18, 14, 12, 14, 15, 15, 13, 4, 12, 18, 8, 10, 12, 13, 13, 9, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1465, 1602, 1783, 1298, 1704, 1734, 1882, 870, 1688, 1726, 1613, 1558, 1029, 2321, 1756, 2192, 587, 1166], "dep_pax": [0, 0, 0, 0, 0, 0, 2601, 2494, 2030, 1611, 1328, 1964, 1866, 1882, 442, 1696, 2461, 1029, 1399, 1745, 1912, 1890, 579, 0]}
         };
 
         const privateFlights = [{"tail":"N109JS","arr":"2026-06-22T21:30","dep":"2026-06-23T11:00","isBased":false},{"tail":"N199Y","arr":"2026-06-23T16:00","dep":"2026-06-23T17:00","isBased":false},{"tail":"N888JE","arr":"2026-06-23T16:00","dep":"2026-06-22T14:30","isBased":false},{"tail":"N8801C","arr":"2026-06-23T11:15","dep":"2026-06-25T11:00","isBased":false},{"tail":"N314CM","arr":"2026-06-23T15:00","dep":"2026-06-24T10:30","isBased":false},{"tail":"N130QS","arr":"2026-06-23T14:48","dep":"2026-06-24T06:00","isBased":false},{"tail":"N214BZ","arr":"2026-06-23T18:25","dep":"2026-06-23T19:25","isBased":false},{"tail":"N312HC","arr":"2026-06-23T09:30","dep":"2026-06-23T13:00","isBased":false},{"tail":"N836JS","arr":"2026-06-23T13:30","dep":"2026-06-23T15:00","isBased":false},{"tail":"N283PH","arr":"2026-06-23T18:44","dep":"2026-06-24T17:01","isBased":false},{"tail":"N893FX","arr":"2026-06-23T10:00","dep":"2026-06-23T11:00","isBased":false},{"tail":"N893FX","arr":"2026-06-23T15:20","dep":"2026-06-23T16:20","isBased":false},{"tail":"N736MG","arr":"2026-06-23T08:42","dep":"2026-06-23T15:30","isBased":false},{"tail":"XBEGD","arr":"2026-06-24T10:00","dep":"2026-06-28T15:00","isBased":false},{"tail":"N130JE","arr":"2026-06-24T16:35","dep":"2026-06-24T17:35","isBased":false},{"tail":"N267PT","arr":"2026-06-24T13:00","dep":"2026-06-28T10:00","isBased":false},{"tail":"N458TC","arr":"2026-06-24T07:40","dep":"2026-06-24T17:00","isBased":false},{"tail":"N126AF","arr":"2026-06-24T09:45","dep":"2026-06-24T10:30","isBased":false},{"tail":"VPCSY","arr":"2026-06-24T15:00","dep":"2026-06-26T13:00","isBased":false},{"tail":"N159WW","arr":"2026-06-24T16:30","dep":"2026-06-24T17:00","isBased":false},{"tail":"N883SJ","arr":"2026-06-24T13:00","dep":"2026-06-25T23:30","isBased":false},{"tail":"N71NF","arr":"2026-06-24T14:18","dep":"2026-06-25T11:11","isBased":false},{"tail":"N660P","arr":"2026-06-24T07:45","dep":"2026-06-24T11:00","isBased":false},{"tail":"N917HP","arr":"2026-06-24T13:48","dep":"2026-06-23T16:30","isBased":false},{"tail":"N367QS","arr":"2026-06-24T06:54","dep":"2026-06-24T07:54","isBased":false},{"tail":"N573QS","arr":"2026-06-24T12:30","dep":"2026-06-24T13:30","isBased":false},{"tail":"N478QS","arr":"2026-06-24T13:30","dep":"2026-06-24T14:30","isBased":false},{"tail":"N741VE","arr":"2026-06-25T17:18","dep":"2026-06-25T08:00","isBased":false},{"tail":"N672HG","arr":"2026-06-25T22:25","dep":null,"isBased":true},{"tail":"N109JS","arr":"2026-06-25T03:55","dep":"2026-06-25T05:25","isBased":false},{"tail":"N74DH","arr":"2026-06-25T10:15","dep":"2026-06-25T11:30","isBased":false},{"tail":"N242JX","arr":"2026-06-25T14:40","dep":"2026-06-25T15:00","isBased":false},{"tail":"N783MM","arr":"2026-06-25T15:15","dep":"2026-06-25T20:45","isBased":false},{"tail":"ALASKAAIRLINES","arr":"2026-06-25T18:15","dep":"2026-06-25T20:00","isBased":false},{"tail":"N627HG","arr":"2026-06-25T20:25","dep":"2026-06-24T12:00","isBased":false},{"tail":"N85JM","arr":"2026-06-25T13:34","dep":"2026-06-24T10:00","isBased":false},{"tail":"OYTAB","arr":"2026-06-25T11:25","dep":"2026-06-26T14:00","isBased":false},{"tail":"N3251K","arr":"2026-06-25T13:00","dep":"2026-06-26T10:00","isBased":false},{"tail":"N947AK","arr":"2026-06-25T18:15","dep":"2026-06-25T19:45","isBased":false},{"tail":"N1966H","arr":"2026-06-25T13:08","dep":"2026-06-26T09:17","isBased":false},{"tail":"N650HA","arr":"2026-06-25T16:00","dep":"2026-06-23T11:00","isBased":false},{"tail":"N294LC","arr":"2026-06-25T13:00","dep":"2026-06-26T08:00","isBased":false},{"tail":"N707MT","arr":"2026-06-25T12:36","dep":"2026-06-16T14:00","isBased":false},{"tail":"N660P","arr":"2026-06-25T19:00","dep":"2026-06-25T19:45","isBased":false},{"tail":"N453QS","arr":"2026-06-25T11:00","dep":"2026-06-25T12:00","isBased":false},{"tail":"N22616","arr":"2026-06-25T12:58","dep":"2026-06-25T14:00","isBased":false},{"tail":"XAMCT","arr":"2026-06-26T12:00","dep":"2026-06-26T14:00","isBased":false},{"tail":"N313AR","arr":"2026-06-26T14:13","dep":null,"isBased":true},{"tail":"N680LL","arr":"2026-06-26T18:00","dep":null,"isBased":true},{"tail":"N672HG","arr":"2026-06-26T02:50","dep":"2026-06-25T23:00","isBased":false},{"tail":"N218HF","arr":"2026-06-26T11:15","dep":"2026-06-27T12:00","isBased":false},{"tail":"N614SG","arr":"2026-06-26T17:30","dep":"2026-06-28T14:00","isBased":false},{"tail":"N91CJ","arr":"2026-06-26T16:15","dep":"2026-06-28T14:00","isBased":false},{"tail":"A7CGG","arr":"2026-06-27T20:00","dep":"2026-06-30T07:00","isBased":false},{"tail":"N244JE","arr":"2026-06-27T17:00","dep":"2026-06-28T00:00","isBased":false},{"tail":"N947AK","arr":"2026-06-27T21:30","dep":"2026-06-28T12:00","isBased":false},{"tail":"TGFOR","arr":"2026-06-27T11:00","dep":"2026-06-28T19:00","isBased":false},{"tail":"N851GK","arr":"2026-06-27T11:40","dep":"2026-06-27T12:30","isBased":false},{"tail":"N74DH","arr":"2026-06-28T12:45","dep":"2026-06-28T13:30","isBased":false},{"tail":"N7402","arr":"2026-06-28T14:30","dep":"2026-07-03T10:00","isBased":false},{"tail":"N680LL","arr":null,"dep":"2026-06-28T10:00","isBased":true},{"tail":"N661WD","arr":"2026-06-28T11:00","dep":"2026-06-28T12:00","isBased":false},{"tail":"N176DL","arr":"2026-06-30T17:00","dep":"2026-06-28T08:30","isBased":false},{"tail":"N31MW","arr":"2026-06-28T14:29","dep":"2026-07-01T08:00","isBased":false},{"tail":"N503KJ","arr":"2026-06-28T13:00","dep":"2026-07-01T17:00","isBased":false},{"tail":"N741VE","arr":"2026-07-05T17:42","dep":"2026-06-28T15:48","isBased":false},{"tail":"N917HP","arr":"2026-06-28T16:36","dep":"2026-06-26T08:00","isBased":false},{"tail":"N765MS","arr":"2026-06-29T11:48","dep":"2026-06-30T08:00","isBased":false},{"tail":"XAMCU","arr":"2026-06-29T13:35","dep":"2026-06-29T16:10","isBased":false},{"tail":"CGXNU","arr":"2026-06-29T17:37","dep":"2026-06-30T19:00","isBased":false},{"tail":"N85JM","arr":"2026-06-29T14:57","dep":"2026-06-29T11:00","isBased":false},{"tail":"N85JM","arr":"2026-06-29T10:36","dep":"2026-06-25T16:00","isBased":false},{"tail":"N125TK","arr":"2026-06-29T14:21","dep":"2026-06-26T10:00","isBased":false},{"tail":"N680LL","arr":"2026-06-30T22:00","dep":null,"isBased":true},{"tail":"CGXNU","arr":"2026-06-30T10:00","dep":"2026-07-01T12:00","isBased":false},{"tail":"N7DK","arr":"2026-06-30T10:37","dep":"2026-07-01T08:01","isBased":false},{"tail":"N686CB","arr":"2026-06-30T07:45","dep":"2026-06-30T08:30","isBased":false},{"tail":"N686CB","arr":"2026-06-30T15:25","dep":"2026-06-30T16:30","isBased":false},{"tail":"N686CB","arr":"2026-06-30T15:25","dep":"2026-06-30T16:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-03T07:00","dep":"2026-07-03T08:00","isBased":false},{"tail":"N7DK","arr":"2026-07-03T10:01","dep":"2026-07-03T11:01","isBased":false},{"tail":"N813BB","arr":"2026-07-01T10:00","dep":"2026-07-01T10:30","isBased":false},{"tail":"N813BB","arr":"2026-07-02T10:00","dep":"2026-07-02T10:30","isBased":false},{"tail":"N700JM","arr":"2026-07-05T13:14","dep":"2026-07-01T11:00","isBased":false},{"tail":"N371DB","arr":"2026-07-02T16:13","dep":null,"isBased":true},{"tail":"N390JS","arr":"2026-07-02T16:14","dep":null,"isBased":true},{"tail":"N15N","arr":"2026-07-02T15:11","dep":"2026-07-02T11:11","isBased":false},{"tail":"XAPLJ","arr":"2026-07-06T10:00","dep":"2026-07-06T22:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-06T19:15","dep":"2026-07-06T20:15","isBased":false},{"tail":"N813BB","arr":"2026-07-05T14:25","dep":"2026-07-05T15:00","isBased":false},{"tail":"N813BB","arr":"2026-07-06T15:15","dep":"2026-07-06T15:45","isBased":false},{"tail":"N280TD","arr":"2026-07-06T12:28","dep":"2026-07-06T07:45","isBased":false},{"tail":"N464C","arr":"2026-07-06T09:00","dep":"2026-07-07T20:00","isBased":false},{"tail":"N293CK","arr":"2026-07-06T13:00","dep":"2026-07-07T19:00","isBased":false},{"tail":"N851BM","arr":"2026-07-06T14:59","dep":"2026-07-07T19:00","isBased":false},{"tail":"N316GN","arr":"2026-07-05T13:23","dep":"2026-07-07T15:00","isBased":false},{"tail":"N1549E","arr":"2026-07-06T10:00","dep":"2026-07-06T18:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-12T16:55","dep":"2026-07-12T17:55","isBased":false},{"tail":"N2619L","arr":"2026-07-13T13:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N537XJ","arr":"2026-07-14T09:45","dep":"2026-07-14T10:45","isBased":false},{"tail":"N7DK","arr":"2026-07-14T10:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N356VJ","arr":"2026-07-14T11:30","dep":"2026-07-14T13:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T11:35","dep":"2026-07-14T12:35","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T17:30","dep":"2026-07-14T18:30","isBased":false},{"tail":"N132JE","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N358VJ","arr":"2026-07-14T18:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N668TX","arr":"2026-07-15T07:45","dep":"2026-07-15T08:45","isBased":false},{"tail":"N350VJ","arr":"2026-07-15T10:00","dep":"2026-07-15T11:00","isBased":false},{"tail":"N600JT","arr":null,"dep":"2026-07-07T07:30","isBased":true},{"tail":"N898CB","arr":"2026-07-07T07:45","dep":"2026-07-07T16:00","isBased":false},{"tail":"N600JT","arr":"2026-07-08T11:18","dep":null,"isBased":true},{"tail":"N365LG","arr":"2026-07-08T12:45","dep":"2026-07-15T21:00","isBased":false},{"tail":"N813BB","arr":"2026-07-09T08:00","dep":"2026-07-09T09:00","isBased":false},{"tail":"PS-AVF","arr":"2026-07-10T18:05","dep":null,"isBased":true},{"tail":"N595CB","arr":"2026-07-10T07:45","dep":"2026-07-10T08:30","isBased":false},{"tail":"N595CB","arr":"2026-07-10T15:15","dep":"2026-07-10T16:00","isBased":false},{"tail":"N813BB","arr":"2026-07-11T15:15","dep":"2026-07-12T09:00","isBased":false},{"tail":"N7402","arr":"2026-07-12T15:12","dep":null,"isBased":true},{"tail":"N624GF","arr":"2026-07-12T13:45","dep":"2026-07-15T07:30","isBased":false},{"tail":"N672HG","arr":"2026-07-12T16:25","dep":"2026-07-12T09:20","isBased":false},{"tail":"VNA298","arr":"2026-07-12T15:30","dep":"2026-07-15T10:20","isBased":false},{"tail":"HALKW","arr":"2026-07-12T12:00","dep":"2026-07-15T18:00","isBased":false},{"tail":"N1303B","arr":"2026-07-12T14:46","dep":"2026-07-14T19:00","isBased":false},{"tail":"DANEO","arr":"2026-07-12T19:40","dep":"2026-07-14T23:00","isBased":false},{"tail":"N298AL","arr":"2026-07-13T09:00","dep":"2026-07-14T21:00","isBased":false},{"tail":"N600H","arr":"2026-07-13T11:21","dep":"2026-07-14T09:00","isBased":false},{"tail":"XA-RHL","arr":"2026-07-13T18:00","dep":"2026-08-15T09:00","isBased":false},{"tail":"N125YU","arr":"2026-07-13T14:30","dep":"2026-07-15T09:30","isBased":false},{"tail":"VNA488","arr":"2026-07-13T10:00","dep":"2026-07-14T21:00","isBased":false},{"tail":"VNA499","arr":"2026-07-13T21:00","dep":"2026-07-15T10:00","isBased":false},{"tail":"VNA799","arr":"2026-07-13T18:45","dep":"2026-07-15T10:00","isBased":false},{"tail":"N298AL","arr":"2026-07-13T16:05","dep":"2026-07-15T11:00","isBased":false},{"tail":"N18TM","arr":"2026-07-13T14:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N626Z","arr":"2026-07-13T17:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N777HN","arr":"2026-07-13T16:00","dep":"2026-07-16T12:00","isBased":false},{"tail":"VNA489","arr":"2026-07-13T18:45","dep":"2026-07-15T13:05","isBased":false},{"tail":"XARAA","arr":"2026-07-13T13:30","dep":"2026-07-14T20:00","isBased":false},{"tail":"XAAAN","arr":"2026-07-13T14:43","dep":"2026-07-15T17:00","isBased":false},{"tail":"N215BB","arr":"2026-07-13T15:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N813BB","arr":"2026-07-13T15:15","dep":"2026-07-13T16:15","isBased":false},{"tail":"N18TM","arr":"2026-07-12T14:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N97DK","arr":"2026-07-14T18:00","dep":null,"isBased":true},{"tail":"N97DK","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N686CB","arr":"2026-07-14T07:45","dep":"2026-07-14T16:00","isBased":false},{"tail":"N342GV","arr":"2026-07-14T10:45","dep":"2026-07-15T08:00","isBased":false},{"tail":"XACCL","arr":"2026-07-14T15:40","dep":"2026-07-15T08:00","isBased":false},{"tail":"PRVCO","arr":"2026-07-14T10:00","dep":"2026-07-15T09:00","isBased":false},{"tail":"N537XJ","arr":"2026-07-14T09:45","dep":"2026-07-14T10:45","isBased":false},{"tail":"XARET","arr":"2026-07-14T10:00","dep":"2026-07-15T19:00","isBased":false},{"tail":"N837VA","arr":"2026-07-14T10:15","dep":"2026-07-15T11:50","isBased":false},{"tail":"VPCFR","arr":"2026-07-14T10:20","dep":"2026-07-14T17:00","isBased":false},{"tail":"VPCZB","arr":"2026-07-14T10:20","dep":"2026-07-14T17:00","isBased":false},{"tail":"N7DK","arr":"2026-07-14T10:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N28UD","arr":"2026-07-14T11:00","dep":"2026-07-14T15:48","isBased":false},{"tail":"N356VJ","arr":"2026-07-14T11:30","dep":"2026-07-14T13:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T11:35","dep":"2026-07-14T12:35","isBased":false},{"tail":"N58MW","arr":"2026-07-14T12:00","dep":"2026-07-14T18:00","isBased":false},{"tail":"CFASY","arr":"2026-07-14T17:00","dep":"2026-07-14T18:00","isBased":false},{"tail":"N672HG","arr":"2026-07-15T20:00","dep":"2026-07-14T17:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T17:30","dep":"2026-07-14T18:30","isBased":false},{"tail":"N132JE","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N358VJ","arr":"2026-07-14T18:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"CFJAS","arr":"2026-07-14T19:15","dep":"2026-07-14T20:15","isBased":false},{"tail":"N765M","arr":"2026-07-15T09:18","dep":"2026-07-16T07:00","isBased":false},{"tail":"N668TX","arr":"2026-07-15T07:45","dep":"2026-07-15T08:45","isBased":false},{"tail":"N350VJ","arr":"2026-07-15T10:00","dep":"2026-07-15T11:00","isBased":false},{"tail":"N285FA","arr":"2026-07-15T10:45","dep":"2026-07-16T14:00","isBased":false}];
-
-        const teamCharters = [
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-20T18:15", "dep": null, "team": "Sweden"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-20T18:40", "dep": null, "team": "Austria"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-20T19:00", "team": "Ferry"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-20T19:25", "team": "Ferry"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-21T16:05", "dep": null, "team": "Argentina"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-21T16:50", "team": "Ferry"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-22T13:45", "dep": null, "team": "Ferry"},
-            {"tail": "TBD", "type": "Alaska B737", "arr": "2026-06-22T13:45", "dep": null, "team": "Ferry"},
-            {"tail": "TBD", "type": "Alaska B737", "arr": null, "dep": "2026-06-22T16:45", "team": "Austria"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-22T16:45", "team": "Argentina"},
-            {"tail": "TBD", "type": "AeroMexico B737", "arr": "2026-06-22T21:30", "dep": null, "team": "Ferry"},
-            {"tail": "TBD", "type": "AeroMexico B737", "arr": null, "dep": "2026-06-23T11:00", "team": "Czechia"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-23T18:25", "dep": null, "team": "Japan"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-23T19:10", "team": "Ferry"},
-            {"tail": "TBD", "type": "AeroMexico B737", "arr": "2026-06-25T03:55", "dep": null, "team": "Czechia"},
-            {"tail": "TBD", "type": "AeroMexico B737", "arr": null, "dep": "2026-06-25T05:25", "team": "Ferry"},
-            {"tail": "TBD", "type": "Alaska B737", "arr": "2026-06-25T18:15", "dep": null, "team": "Jordan"},
-            {"tail": "TBD", "type": "Alaska B737", "arr": null, "dep": "2026-06-25T19:45", "team": "Ferry"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-25T19:45", "dep": null, "team": "Ferry"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-25T22:45", "team": "Japan"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-26T11:35", "dep": null, "team": "Argentina"},
-            {"tail": "TBD", "type": "Breeze A220", "arr": null, "dep": "2026-06-26T12:20", "team": "Ferry"}
-        ];
 
         let currentChartInstance = null;
         let capChartInstance = null;
@@ -462,11 +395,11 @@
             selectedDateStr = dateString;
             document.querySelectorAll('.date-btn').forEach(btn => {
                 const isMatch = matchDays.includes(btn.id.replace('btn-', ''));
-                if(isMatch) btn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-emerald-400 hover:text-emerald-300 match-day border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2 shadow-lg shadow-emerald-900/50 scale-105 transform active:scale-95";
+                if(isMatch) btn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-emerald-400 hover:text-emerald-300 match-day border border-emerald-500/30 bg-emerald-500/10 flex items-center gap-2 shadow-lg shadow-emerald-900/50 transform hover:scale-105 active:scale-95";
                 else btn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800 transform hover:scale-105 active:scale-95";
             });
             const activeBtn = document.getElementById(`btn-${dateString}`);
-            if (matchDays.includes(dateString)) activeBtn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-white match-day border border-emerald-400 bg-emerald-600 flex items-center gap-2 shadow-lg shadow-emerald-900/50 scale-105 transform active:scale-95";
+            if (matchDays.includes(dateString)) activeBtn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 text-white match-day border border-emerald-400 bg-emerald-600 flex items-center gap-2 shadow-lg shadow-emerald-900/50 transform hover:scale-105 active:scale-95";
             else activeBtn.className = "date-btn px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 bg-sky-600 text-white shadow-lg shadow-sky-900/50 scale-105 transform active:scale-95";
             renderDashboard(dateString);
         }
@@ -543,78 +476,29 @@
                     }
                 });
 
-            // Dynamic Match Card (Official FIFA Schedule)
+            // Dynamic Match Card
             const matchCard = document.getElementById('match-card-content');
             if (matchCard) {
                 const targetTime = new Date(`${targetDate}T00:00:00`).getTime();
+                const match25 = new Date('2026-06-25T00:00:00').getTime();
                 
-                const matches = [
-                    { date: '2026-06-14', time: '15:00 CDT', home: 'NED', away: 'JPN', homeFlag: 'nl', awayFlag: 'jp' },
-                    { date: '2026-06-17', time: '15:00 CDT', home: 'ENG', away: 'CRO', homeFlag: 'gb-eng', awayFlag: 'hr' },
-                    { date: '2026-06-22', time: '12:00 CDT', home: 'ARG', away: 'AUT', homeFlag: 'ar', awayFlag: 'at' },
-                    { date: '2026-06-25', time: '18:00 CDT', home: 'JPN', away: 'SWE', homeFlag: 'jp', awayFlag: 'se' },
-                    { date: '2026-06-27', time: '21:00 CDT', home: 'JOR', away: 'ARG', homeFlag: 'jo', awayFlag: 'ar' },
-                    { date: '2026-06-30', time: '12:00 CDT', home: 'TBD', away: 'TBD', homeFlag: 'un', awayFlag: 'un' }
-                ];
-                
-                let nextMatch = matches[matches.length - 1];
-                for (let m of matches) {
-                    if (new Date(`${m.date}T00:00:00`).getTime() >= targetTime) {
-                        nextMatch = m;
-                        break;
-                    }
+                if (targetTime > match25) {
+                    matchCard.innerHTML = `
+                        <img src="https://flagcdn.com/w20/jo.png" alt="JOR" class="w-5 shadow-sm rounded-sm"> JOR 
+                        <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
+                        <img src="https://flagcdn.com/w20/ar.png" alt="ARG" class="w-5 shadow-sm rounded-sm"> ARG
+                    `;
+                    document.getElementById('match-card-date').innerText = "Sat, June 27 @ 21:00 CDT";
+                } else {
+                    matchCard.innerHTML = `
+                        <img src="https://flagcdn.com/w20/jp.png" alt="JPN" class="w-5 shadow-sm rounded-sm"> JPN 
+                        <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
+                        <img src="https://flagcdn.com/w20/se.png" alt="SWE" class="w-5 shadow-sm rounded-sm"> SWE
+                    `;
+                    document.getElementById('match-card-date').innerText = "Thu, June 25 @ 18:00 CDT";
                 }
-                
-                let homeImg = nextMatch.homeFlag !== 'un' ? `<img src="https://flagcdn.com/w20/${nextMatch.homeFlag}.png" alt="${nextMatch.home}" class="w-5 shadow-sm rounded-sm">` : '🛡️';
-                let awayImg = nextMatch.awayFlag !== 'un' ? `<img src="https://flagcdn.com/w20/${nextMatch.awayFlag}.png" alt="${nextMatch.away}" class="w-5 shadow-sm rounded-sm">` : '🛡️';
-
-                matchCard.innerHTML = `
-                    ${homeImg} ${nextMatch.home} 
-                    <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
-                    ${awayImg} ${nextMatch.away}
-                `;
-                
-                const parts = nextMatch.date.split('-');
-                const matchDateObj = new Date(parts[0], parts[1]-1, parts[2]);
-                const dateString = matchDateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-                
-                document.getElementById('match-card-date').innerText = `${dateString} @ ${nextMatch.time}`;
             }
 
-            let tableHtml = "";
-                teamCharters.forEach(flight => {
-                    const arrTime = flight.arr ? new Date(flight.arr) : null;
-                    const depTime = flight.dep ? new Date(flight.dep) : null;
-                    
-                    const isArrToday = arrTime && arrTime >= dayStart && arrTime <= dayEnd;
-                    const isDepToday = depTime && depTime >= dayStart && depTime <= dayEnd;
-
-                    if (isArrToday) { dynamicArrivals[arrTime.getHours()]++; dailyTotal++; totalArr++; }
-                    if (isDepToday) { dynamicDepartures[depTime.getHours()]++; dailyTotal++; totalDep++; }
-
-                    if (isArrToday) {
-                        tableHtml += `
-                            <tr class="hover:bg-slate-800/80 transition-colors group animate-fade-in">
-                                <td class="p-4 pl-6 font-mono text-white font-bold group-hover:text-emerald-400 transition-colors">${flight.tail}</td>
-                                <td class="p-4 text-slate-400">${flight.type}</td>
-                                <td class="p-4 text-emerald-400 font-bold flex items-center gap-2"><span class="text-lg">🛬</span> Drop-off</td>
-                                <td class="p-4 font-mono font-medium">${arrTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
-                                <td class="p-4"><span class="px-2.5 py-1 text-[11px] font-black tracking-widest uppercase rounded bg-slate-800 text-slate-200 border border-slate-600 shadow-md flex items-center gap-1.5 w-max">${getTeamFlag(flight.team)} ${flight.team}</span></td>
-                            </tr>`;
-                    }
-                    if (isDepToday) {
-                        tableHtml += `
-                            <tr class="hover:bg-slate-800/80 transition-colors group animate-fade-in">
-                                <td class="p-4 pl-6 font-mono text-white font-bold group-hover:text-amber-400 transition-colors">${flight.tail}</td>
-                                <td class="p-4 text-slate-400">${flight.type}</td>
-                                <td class="p-4 text-amber-400 font-bold flex items-center gap-2"><span class="text-lg">🛫</span> Departure</td>
-                                <td class="p-4 font-mono font-medium">${depTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</td>
-                                <td class="p-4"><span class="px-2.5 py-1 text-[11px] font-black tracking-widest uppercase rounded bg-slate-800 text-slate-200 border border-slate-600 shadow-md flex items-center gap-1.5 w-max">${getTeamFlag(flight.team)} ${flight.team}</span></td>
-                            </tr>`;
-                    }
-                });
-
-                if(!tableHtml) tableHtml = `<tr><td colspan="5" class="p-8 text-center text-slate-500 font-medium tracking-wide">No scheduled Team Charter operations found for this day.</td></tr>`;
 
                 let maxOps = 0, peakOpsHour = 0;
                 for(let i=0; i<24; i++) {
@@ -666,8 +550,6 @@
                 document.getElementById('kpi-pax-arr-time').innerText = `${String(peakArrPaxHour).padStart(2,'0')}:00`;
                 animateValue(document.getElementById('kpi-pax-dep-count'), 0, peakDepPax, 800);
                 document.getElementById('kpi-pax-dep-time').innerText = `${String(peakDepPaxHour).padStart(2,'0')}:00`;
-                
-                document.getElementById('flight-table-body').innerHTML = tableHtml;
 
                 drawCapacityChart(totalUsedSpots, spotsRemaining);
                 drawHourlyChart();
