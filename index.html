@@ -11,39 +11,46 @@
         body { font-family: 'Inter', sans-serif; background-color: #050b14; color: #f8fafc; overflow-x: hidden; }
         .match-day { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); border-color: #10b981; }
         .fifa-gradient { background: linear-gradient(90deg, #db2777 0%, #4f46e5 50%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .dal-border { border-top: 6px solid #0ea5e9; }
         
-        /* Modern Glass Effect */
-        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(51, 65, 85, 0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease; }
-        .glass-panel:hover { border-color: rgba(56, 189, 248, 0.3); }
+        
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Interactive Card Lift */
-        .kpi-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.1); z-index: 10; }
         
-        /* Table Row Cascade Animation */
-        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in { animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        /* Advanced UI Enhancements */
+        .glass-panel { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;}
+        .glass-panel:hover { border-color: rgba(56, 189, 248, 0.5); box-shadow: 0 15px 50px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2); }
         
-        /* Floating Weather Icon */
+        .date-btn { transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .date-btn:hover { transform: translateY(-3px) scale(1.05); }
+        .date-btn:active { transform: translateY(1px) scale(0.95); }
+        
+        .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 1rem; padding: 2px; background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        
         @keyframes float { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-8px) scale(1.05); filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4)); } 100% { transform: translateY(0px) scale(1); } }
         .animate-float { animation: float 3s ease-in-out infinite; }
         
-        /* Strobe Alerts */
+        .kpi-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .kpi-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.1); z-index: 10; }
+
+        /* Alert Animation */
         @keyframes strobe { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.99); } 100% { opacity: 1; transform: scale(1); } }
         .alert-strobe { animation: strobe 2s infinite; }
     </style>
 </head>
-<body class="p-4 md:p-6 min-h-screen dal-border">
+<body class="p-4 md:p-6 min-h-screen ">
 
-    <div id="sky-bg" class="fixed top-0 left-0 w-full h-full z-[-2] transition-all duration-[2000ms] ease-in-out opacity-0 pointer-events-none"></div>
+    <div id="airport-bg" class="fixed top-0 left-0 w-full h-full z-[-3] transition-all duration-[2000ms] ease-in-out" style="background-size: cover; background-position: center; filter: brightness(0.9) contrast(1.1);"></div>
+    <div id="sky-bg" class="fixed top-0 left-0 w-full h-full z-[-2] transition-all duration-[2000ms] ease-in-out opacity-0 pointer-events-none mix-blend-multiply"></div>
     <div id="sun-moon-container" class="fixed top-0 left-0 w-full h-full z-[-1] pointer-events-none overflow-hidden mix-blend-screen opacity-60">
         <div id="celestial-body" class="absolute w-64 h-64 rounded-full blur-[80px] transition-all duration-[2000ms] ease-in-out"></div>
     </div>
     <div class="max-w-[90rem] mx-auto space-y-6 relative z-10">
         
-        <!-- Overflow Alert Banner -->
         <div id="capacity-alert" class="hidden alert-strobe bg-red-600/20 border-2 border-red-500 rounded-2xl p-4 shadow-[0_0_30px_rgba(239,68,68,0.3)] flex items-center justify-between transition-all">
             <div class="flex items-center gap-4">
                 <div class="text-4xl animate-bounce">🚨</div>
@@ -54,7 +61,6 @@
             </div>
         </div>
 
-        <!-- OPCON Clocks & Branding Header -->
         <header class="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
             <div class="group cursor-pointer">
                 <div class="flex items-center gap-2 mb-1">
@@ -68,7 +74,6 @@
                 </h1>
             </div>
 
-            <!-- Massive Clocks -->
             <div class="glass-panel p-4 px-6 rounded-2xl flex flex-col sm:flex-row items-center gap-6 sm:gap-10 w-full xl:w-auto hover:bg-slate-800/80 transition-all duration-300">
                 <div class="flex items-center gap-4 w-full sm:w-auto">
                     <div>
@@ -89,7 +94,6 @@
             </div>
         </header>
 
-        <!-- Controls Row -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/60 p-2 rounded-2xl border border-slate-800 shadow-lg relative overflow-hidden group">
             <div class="absolute inset-0 bg-gradient-to-r from-sky-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
             <div class="flex items-center gap-2 overflow-x-auto w-full pb-2 md:pb-0 hide-scrollbar relative z-10" id="date-selector">
@@ -103,10 +107,8 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             
-            <!-- Left Column: Context Info & Capacity -->
             <div class="space-y-6 lg:col-span-1">
                 
-                <!-- CAPACITY CHART -->
                 <div class="glass-panel rounded-2xl p-5 border-t-2 border-t-pink-500/50 relative overflow-hidden group">
                     <div class="absolute -right-20 -top-20 w-40 h-40 bg-pink-500/10 rounded-full blur-3xl group-hover:bg-pink-500/20 transition-all duration-700"></div>
                     <div class="flex items-center justify-between mb-4 relative z-10">
@@ -138,11 +140,10 @@
                     </div>
                 </div>
 
-                <!-- LIVE WEATHER MODULE -->
                 <div class="glass-panel rounded-2xl p-5 border-t-2 border-t-sky-500/50 group hover:border-sky-500/50 transition-colors">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-sky-300 transition-colors">Live Weather (KDAL)</h3>
-                        <span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 font-bold text-[9px] uppercase tracking-wider rounded border border-blue-500/20 flex items-center gap-1.5 shadow-[0_0_10px_rgba(56,189,248,0.2)]"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span> LIVE FEED</span>
+                        <span class="px-2 py-0.5 bg-blue-500/10 text-blue-400 font-bold text-[9px] uppercase tracking-wider rounded border border-blue-500/20 flex items-center gap-1.5 shadow-[0_0_10px_rgba(56,189,248,0.2)]"><span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span> HRRR FEED</span>
                     </div>
                     
                     <div class="flex items-center justify-between bg-gradient-to-br from-sky-900/40 to-slate-900/80 border border-sky-800/30 p-4 rounded-xl shadow-inner group-hover:shadow-[inset_0_2px_15px_rgba(56,189,248,0.1)] transition-all duration-300">
@@ -155,7 +156,6 @@
                     </div>
                 </div>
 
-                <!-- Matches Card -->
                 <div class="glass-panel rounded-2xl p-5 border-t-2 border-t-emerald-500/50 group">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-emerald-400 transition-colors">Match Status</h3>
@@ -169,15 +169,13 @@
                             <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
                             <img src="https://flagcdn.com/w20/jp.png" alt="JPN" class="w-5 shadow-sm rounded-sm"> JPN
                         </p>
-                        <p id="match-card-date" class="text-xs font-semibold text-emerald-200/70 relative z-10 bg-emerald-900/40 inline-block px-2 py-0.5 rounded border border-emerald-500/20 mt-1">Thu, June 25 @ 18:00 CDT</p>
+                        <p id="match-card-date" class="text-xs font-semibold text-emerald-200/70 relative z-10 bg-emerald-900/40 inline-block px-2 py-0.5 rounded border border-emerald-500/20 mt-1">Thu, June 25 @ 15:00 CDT</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Charts & Table -->
             <div class="lg:col-span-3 space-y-6">
                 
-                <!-- Core Operations KPI Stats -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group kpi-card cursor-default">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-sky-500/10 rounded-bl-full transition-transform duration-500 group-hover:scale-[1.8] group-hover:bg-sky-500/20"></div>
@@ -205,7 +203,6 @@
                     </div>
                 </div>
 
-                <!-- Passenger KPI Stats Row -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="glass-panel p-5 rounded-2xl relative overflow-hidden group kpi-card border-l-2 border-l-emerald-500/50 cursor-default bg-gradient-to-r from-slate-900 to-emerald-900/10">
                         <div class="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full transition-transform duration-500 group-hover:scale-[1.8] group-hover:bg-emerald-500/20"></div>
@@ -225,7 +222,6 @@
                     </div>
                 </div>
 
-                <!-- Tabbable Chart -->
                 <div class="glass-panel rounded-2xl p-6 border-t-2 border-t-sky-500/50 group transition-colors hover:border-sky-400">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
                         <div>
@@ -244,7 +240,6 @@
                     </div>
                 </div>
 
-                <!-- Operations Table -->
                 <div class="glass-panel rounded-2xl overflow-hidden border-t-2 border-t-slate-700 hover:border-slate-500 transition-colors">
                     <div class="p-5 border-b border-slate-800/80 flex justify-between items-center bg-black/40">
                         <div>
@@ -267,8 +262,7 @@
                                 </tr>
                             </thead>
                             <tbody id="flight-table-body" class="divide-y divide-slate-800/50 text-slate-200">
-                                <!-- Injected dynamically by script -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -278,31 +272,33 @@
     </div>
 
     <script>
-        // UN-SIMULATED WEATHER FETCHER Engine
         function fetchActualWeather() {
+            // Simplified standard weather fetch to prevent timeout/CORS drops
             fetch('https://api.open-meteo.com/v1/forecast?latitude=32.8471&longitude=-96.8518&current_weather=true&temperature_unit=fahrenheit&windspeed_unit=mph')
                 .then(res => res.json())
                 .then(data => {
                     if(data && data.current_weather) {
-                        document.getElementById('live-temp').innerText = Math.round(data.current_weather.temperature) + '°F';
-                        document.getElementById('live-wind').innerText = Math.round(data.current_weather.windspeed) + ' mph';
+                        const w = data.current_weather;
+                        document.getElementById('live-temp').innerText = Math.round(w.temperature) + '°F';
+                        document.getElementById('live-wind').innerText = Math.round(w.windspeed) + ' mph';
                         
-                        const codes = {
-                            0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
-                            45: 'Fog', 48: 'Fog', 51: 'Light drizzle', 53: 'Drizzle',
-                            61: 'Light rain', 63: 'Moderate rain', 65: 'Heavy rain',
-                            80: 'Rain showers', 95: 'Thunderstorm'
-                        };
-                        const c = data.current_weather.weathercode;
-                        document.getElementById('live-desc').innerText = codes[c] || 'Mostly Cloudy';
+                        let desc = 'Clear';
+                        let icon = '☀️';
                         
-                        if(c === 0 || c === 1) document.getElementById('live-icon').innerText = '☀️';
-                        else if(c === 2) document.getElementById('live-icon').innerText = '⛅';
-                        else if(c === 3 || c === 45) document.getElementById('live-icon').innerText = '☁️';
-                        else if(c === 61 || c === 63 || c === 65 || c === 80) document.getElementById('live-icon').innerText = '🌧️';
-                        else if(c === 95) document.getElementById('live-icon').innerText = '⛈️';
+                        if (w.weathercode >= 1 && w.weathercode <= 3) { desc = 'Cloudy'; icon = '⛅'; }
+                        if (w.weathercode >= 45 && w.weathercode <= 48) { desc = 'Fog'; icon = '☁️'; }
+                        if (w.weathercode >= 51 && w.weathercode <= 67) { desc = 'Rain'; icon = '🌧️'; }
+                        if (w.weathercode >= 71 && w.weathercode <= 77) { desc = 'Snow'; icon = '❄️'; }
+                        if (w.weathercode >= 80 && w.weathercode <= 82) { desc = 'Showers'; icon = '🌧️'; }
+                        if (w.weathercode >= 95) { desc = 'Thunderstorm'; icon = '⛈️'; }
+                        
+                        document.getElementById('live-desc').innerText = desc;
+                        document.getElementById('live-icon').innerText = icon;
                     }
-                }).catch(() => { document.getElementById('live-desc').innerText = "Sensor Offline"; });
+                }).catch(e => { 
+                    console.log("Weather Error:", e);
+                    document.getElementById('live-desc').innerText = "Data Offline"; 
+                });
         }
         fetchActualWeather();
         setInterval(fetchActualWeather, 300000); 
@@ -334,8 +330,15 @@
             
             const sky = document.getElementById('sky-bg');
             const celestial = document.getElementById('celestial-body');
+            const airportBg = document.getElementById('airport-bg');
             
             let isDay = timeFloat >= 6 && timeFloat < 20;
+            
+            if (isDay) {
+                airportBg.style.backgroundImage = "url('Generated Image June 24, 2026 - 5_05PM.jpg')";
+            } else {
+                airportBg.style.backgroundImage = "url('DSC_5722.jpg')";
+            }
             
             let progress = 0;
             if (isDay) {
@@ -343,23 +346,23 @@
                 sky.style.background = 'radial-gradient(circle at 50% 100%, #db2777 0%, #4f46e5 40%, #050b14 80%)'; 
                 if(timeFloat >= 6 && timeFloat < 8) {
                     sky.style.background = 'linear-gradient(to top, #db2777, #4f46e5, #050b14)';
-                    sky.style.opacity = '0.5';
+                    sky.style.opacity = '0.6';
                     celestial.style.background = 'rgba(251, 146, 60, 0.8)'; 
                 } else if(timeFloat >= 8 && timeFloat < 18) {
-                    sky.style.background = 'linear-gradient(to top, #38bdf8, #0369a1, #050b14)';
-                    sky.style.opacity = '0.4';
-                    celestial.style.background = 'rgba(253, 224, 71, 0.6)'; 
+                    sky.style.background = 'linear-gradient(to top, #38bdf8, #0ea5e9, #050b14)';
+                    sky.style.opacity = '0.1'; // Let the image shine through
+                    celestial.style.background = 'rgba(253, 224, 71, 0.7)'; 
                 } else {
                     sky.style.background = 'linear-gradient(to top, #f97316, #be185d, #050b14)';
-                    sky.style.opacity = '0.5';
+                    sky.style.opacity = '0.6';
                     celestial.style.background = 'rgba(244, 63, 94, 0.8)'; 
                 }
             } else {
                 let adjustedTime = timeFloat < 6 ? timeFloat + 24 : timeFloat;
                 progress = (adjustedTime - 20) / 10;
-                sky.style.background = 'linear-gradient(to top, #1e293b, #050b14)';
-                sky.style.opacity = '0.8';
-                celestial.style.background = 'rgba(148, 163, 184, 0.3)'; 
+                sky.style.background = 'linear-gradient(to top, #0f172a, #020617)';
+                sky.style.opacity = '0.85'; // Heavily darken image for night mode
+                celestial.style.background = 'rgba(226, 232, 240, 0.4)'; 
             }
 
             const xPos = progress * 120 - 10; 
@@ -391,7 +394,7 @@
             "2026-06-28": {"arr": [0, 0, 0, 0, 0, 0, 10, 10, 13, 7, 12, 7, 14, 10, 10, 12, 16, 10, 9, 14, 14, 19, 16, 8], "dep": [0, 0, 0, 0, 0, 0, 17, 16, 14, 15, 13, 11, 13, 16, 5, 12, 11, 13, 7, 8, 13, 16, 12, 0], "arr_pax": [0, 0, 0, 0, 0, 0, 1481, 1451, 1895, 999, 1698, 878, 2051, 1465, 1112, 1330, 2017, 1114, 1308, 2058, 1877, 2485, 719, 1177], "dep_pax": [0, 0, 0, 0, 0, 0, 2445, 2359, 1868, 2046, 1441, 1256, 1618, 2194, 738, 1696, 1454, 1759, 952, 1160, 1921, 2335, 732, 0]}
         };
 
-        const privateFlights = [{"tail":"N109JS","arr":"2026-06-22T21:30","dep":"2026-06-23T11:00","isBased":false},{"tail":"N199Y","arr":"2026-06-23T16:00","dep":"2026-06-23T17:00","isBased":false},{"tail":"N888JE","arr":"2026-06-23T16:00","dep":"2026-06-22T14:30","isBased":false},{"tail":"N8801C","arr":"2026-06-23T11:15","dep":"2026-06-25T11:00","isBased":false},{"tail":"N314CM","arr":"2026-06-23T15:00","dep":"2026-06-24T10:30","isBased":false},{"tail":"N130QS","arr":"2026-06-23T14:48","dep":"2026-06-24T06:00","isBased":false},{"tail":"N214BZ","arr":"2026-06-23T18:25","dep":"2026-06-23T19:25","isBased":false},{"tail":"N312HC","arr":"2026-06-23T09:30","dep":"2026-06-23T13:00","isBased":false},{"tail":"N836JS","arr":"2026-06-23T13:30","dep":"2026-06-23T15:00","isBased":false},{"tail":"N283PH","arr":"2026-06-23T18:44","dep":"2026-06-24T17:01","isBased":false},{"tail":"N893FX","arr":"2026-06-23T10:00","dep":"2026-06-23T11:00","isBased":false},{"tail":"N893FX","arr":"2026-06-23T15:20","dep":"2026-06-23T16:20","isBased":false},{"tail":"N736MG","arr":"2026-06-23T08:42","dep":"2026-06-23T15:30","isBased":false},{"tail":"XBEGD","arr":"2026-06-24T10:00","dep":"2026-06-28T15:00","isBased":false},{"tail":"N130JE","arr":"2026-06-24T16:35","dep":"2026-06-24T17:35","isBased":false},{"tail":"N267PT","arr":"2026-06-24T13:00","dep":"2026-06-28T10:00","isBased":false},{"tail":"N458TC","arr":"2026-06-24T07:40","dep":"2026-06-24T17:00","isBased":false},{"tail":"N126AF","arr":"2026-06-24T09:45","dep":"2026-06-24T10:30","isBased":false},{"tail":"VPCSY","arr":"2026-06-24T15:00","dep":"2026-06-26T13:00","isBased":false},{"tail":"N159WW","arr":"2026-06-24T16:30","dep":"2026-06-24T17:00","isBased":false},{"tail":"N883SJ","arr":"2026-06-24T13:00","dep":"2026-06-25T23:30","isBased":false},{"tail":"N71NF","arr":"2026-06-24T14:18","dep":"2026-06-25T11:11","isBased":false},{"tail":"N660P","arr":"2026-06-24T07:45","dep":"2026-06-24T11:00","isBased":false},{"tail":"N917HP","arr":"2026-06-24T13:48","dep":"2026-06-23T16:30","isBased":false},{"tail":"N367QS","arr":"2026-06-24T06:54","dep":"2026-06-24T07:54","isBased":false},{"tail":"N573QS","arr":"2026-06-24T12:30","dep":"2026-06-24T13:30","isBased":false},{"tail":"N478QS","arr":"2026-06-24T13:30","dep":"2026-06-24T14:30","isBased":false},{"tail":"N741VE","arr":"2026-06-25T17:18","dep":"2026-06-25T08:00","isBased":false},{"tail":"N672HG","arr":"2026-06-25T22:25","dep":null,"isBased":true},{"tail":"N109JS","arr":"2026-06-25T03:55","dep":"2026-06-25T05:25","isBased":false},{"tail":"N74DH","arr":"2026-06-25T10:15","dep":"2026-06-25T11:30","isBased":false},{"tail":"N242JX","arr":"2026-06-25T14:40","dep":"2026-06-25T15:00","isBased":false},{"tail":"N783MM","arr":"2026-06-25T15:15","dep":"2026-06-25T20:45","isBased":false},{"tail":"ALASKAAIRLINES","arr":"2026-06-25T18:15","dep":"2026-06-25T20:00","isBased":false},{"tail":"N627HG","arr":"2026-06-25T20:25","dep":"2026-06-24T12:00","isBased":false},{"tail":"N85JM","arr":"2026-06-25T13:34","dep":"2026-06-24T10:00","isBased":false},{"tail":"OYTAB","arr":"2026-06-25T11:25","dep":"2026-06-26T14:00","isBased":false},{"tail":"N3251K","arr":"2026-06-25T13:00","dep":"2026-06-26T10:00","isBased":false},{"tail":"N947AK","arr":"2026-06-25T18:15","dep":"2026-06-25T19:45","isBased":false},{"tail":"N1966H","arr":"2026-06-25T13:08","dep":"2026-06-26T09:17","isBased":false},{"tail":"N650HA","arr":"2026-06-25T16:00","dep":"2026-06-23T11:00","isBased":false},{"tail":"N294LC","arr":"2026-06-25T13:00","dep":"2026-06-26T08:00","isBased":false},{"tail":"N707MT","arr":"2026-06-25T12:36","dep":"2026-06-16T14:00","isBased":false},{"tail":"N660P","arr":"2026-06-25T19:00","dep":"2026-06-25T19:45","isBased":false},{"tail":"N453QS","arr":"2026-06-25T11:00","dep":"2026-06-25T12:00","isBased":false},{"tail":"N22616","arr":"2026-06-25T12:58","dep":"2026-06-25T14:00","isBased":false},{"tail":"XAMCT","arr":"2026-06-26T12:00","dep":"2026-06-26T14:00","isBased":false},{"tail":"N313AR","arr":"2026-06-26T14:13","dep":null,"isBased":true},{"tail":"N680LL","arr":"2026-06-26T18:00","dep":null,"isBased":true},{"tail":"N672HG","arr":"2026-06-26T02:50","dep":"2026-06-25T23:00","isBased":false},{"tail":"N218HF","arr":"2026-06-26T11:15","dep":"2026-06-27T12:00","isBased":false},{"tail":"N614SG","arr":"2026-06-26T17:30","dep":"2026-06-28T14:00","isBased":false},{"tail":"N91CJ","arr":"2026-06-26T16:15","dep":"2026-06-28T14:00","isBased":false},{"tail":"A7CGG","arr":"2026-06-27T20:00","dep":"2026-06-30T07:00","isBased":false},{"tail":"N244JE","arr":"2026-06-27T17:00","dep":"2026-06-28T00:00","isBased":false},{"tail":"N947AK","arr":"2026-06-27T21:30","dep":"2026-06-28T12:00","isBased":false},{"tail":"TGFOR","arr":"2026-06-27T11:00","dep":"2026-06-28T19:00","isBased":false},{"tail":"N851GK","arr":"2026-06-27T11:40","dep":"2026-06-27T12:30","isBased":false},{"tail":"N74DH","arr":"2026-06-28T12:45","dep":"2026-06-28T13:30","isBased":false},{"tail":"N7402","arr":"2026-06-28T14:30","dep":"2026-07-03T10:00","isBased":false},{"tail":"N680LL","arr":null,"dep":"2026-06-28T10:00","isBased":true},{"tail":"N661WD","arr":"2026-06-28T11:00","dep":"2026-06-28T12:00","isBased":false},{"tail":"N176DL","arr":"2026-06-30T17:00","dep":"2026-06-28T08:30","isBased":false},{"tail":"N31MW","arr":"2026-06-28T14:29","dep":"2026-07-01T08:00","isBased":false},{"tail":"N503KJ","arr":"2026-06-28T13:00","dep":"2026-07-01T17:00","isBased":false},{"tail":"N741VE","arr":"2026-07-05T17:42","dep":"2026-06-28T15:48","isBased":false},{"tail":"N917HP","arr":"2026-06-28T16:36","dep":"2026-06-26T08:00","isBased":false},{"tail":"N765MS","arr":"2026-06-29T11:48","dep":"2026-06-30T08:00","isBased":false},{"tail":"XAMCU","arr":"2026-06-29T13:35","dep":"2026-06-29T16:10","isBased":false},{"tail":"CGXNU","arr":"2026-06-29T17:37","dep":"2026-06-30T19:00","isBased":false},{"tail":"N85JM","arr":"2026-06-29T14:57","dep":"2026-06-29T11:00","isBased":false},{"tail":"N85JM","arr":"2026-06-29T10:36","dep":"2026-06-25T16:00","isBased":false},{"tail":"N125TK","arr":"2026-06-29T14:21","dep":"2026-06-26T10:00","isBased":false},{"tail":"N680LL","arr":"2026-06-30T22:00","dep":null,"isBased":true},{"tail":"CGXNU","arr":"2026-06-30T10:00","dep":"2026-07-01T12:00","isBased":false},{"tail":"N7DK","arr":"2026-06-30T10:37","dep":"2026-07-01T08:01","isBased":false},{"tail":"N686CB","arr":"2026-06-30T07:45","dep":"2026-06-30T08:30","isBased":false},{"tail":"N686CB","arr":"2026-06-30T15:25","dep":"2026-06-30T16:30","isBased":false},{"tail":"N686CB","arr":"2026-06-30T15:25","dep":"2026-06-30T16:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-03T07:00","dep":"2026-07-03T08:00","isBased":false},{"tail":"N7DK","arr":"2026-07-03T10:01","dep":"2026-07-03T11:01","isBased":false},{"tail":"N813BB","arr":"2026-07-01T10:00","dep":"2026-07-01T10:30","isBased":false},{"tail":"N813BB","arr":"2026-07-02T10:00","dep":"2026-07-02T10:30","isBased":false},{"tail":"N700JM","arr":"2026-07-05T13:14","dep":"2026-07-01T11:00","isBased":false},{"tail":"N371DB","arr":"2026-07-02T16:13","dep":null,"isBased":true},{"tail":"N390JS","arr":"2026-07-02T16:14","dep":null,"isBased":true},{"tail":"N15N","arr":"2026-07-02T15:11","dep":"2026-07-02T11:11","isBased":false},{"tail":"XAPLJ","arr":"2026-07-06T10:00","dep":"2026-07-06T22:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-06T19:15","dep":"2026-07-06T20:15","isBased":false},{"tail":"N813BB","arr":"2026-07-05T14:25","dep":"2026-07-05T15:00","isBased":false},{"tail":"N813BB","arr":"2026-07-06T15:15","dep":"2026-07-06T15:45","isBased":false},{"tail":"N280TD","arr":"2026-07-06T12:28","dep":"2026-07-06T07:45","isBased":false},{"tail":"N464C","arr":"2026-07-06T09:00","dep":"2026-07-07T20:00","isBased":false},{"tail":"N293CK","arr":"2026-07-06T13:00","dep":"2026-07-07T19:00","isBased":false},{"tail":"N851BM","arr":"2026-07-06T14:59","dep":"2026-07-07T19:00","isBased":false},{"tail":"N316GN","arr":"2026-07-05T13:23","dep":"2026-07-07T15:00","isBased":false},{"tail":"N1549E","arr":"2026-07-06T10:00","dep":"2026-07-06T18:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-12T16:55","dep":"2026-07-12T17:55","isBased":false},{"tail":"N2619L","arr":"2026-07-13T13:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N537XJ","arr":"2026-07-14T09:45","dep":"2026-07-14T10:45","isBased":false},{"tail":"N7DK","arr":"2026-07-14T10:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N356VJ","arr":"2026-07-14T11:30","dep":"2026-07-14T13:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T11:35","dep":"2026-07-14T12:35","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T17:30","dep":"2026-07-14T18:30","isBased":false},{"tail":"N132JE","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N358VJ","arr":"2026-07-14T18:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N668TX","arr":"2026-07-15T07:45","dep":"2026-07-15T08:45","isBased":false},{"tail":"N350VJ","arr":"2026-07-15T10:00","dep":"2026-07-15T11:00","isBased":false},{"tail":"N600JT","arr":null,"dep":"2026-07-07T07:30","isBased":true},{"tail":"N898CB","arr":"2026-07-07T07:45","dep":"2026-07-07T16:00","isBased":false},{"tail":"N600JT","arr":"2026-07-08T11:18","dep":null,"isBased":true},{"tail":"N365LG","arr":"2026-07-08T12:45","dep":"2026-07-15T21:00","isBased":false},{"tail":"N813BB","arr":"2026-07-09T08:00","dep":"2026-07-09T09:00","isBased":false},{"tail":"PS-AVF","arr":"2026-07-10T18:05","dep":null,"isBased":true},{"tail":"N595CB","arr":"2026-07-10T07:45","dep":"2026-07-10T08:30","isBased":false},{"tail":"N595CB","arr":"2026-07-10T15:15","dep":"2026-07-10T16:00","isBased":false},{"tail":"N813BB","arr":"2026-07-11T15:15","dep":"2026-07-12T09:00","isBased":false},{"tail":"N7402","arr":"2026-07-12T15:12","dep":null,"isBased":true},{"tail":"N624GF","arr":"2026-07-12T13:45","dep":"2026-07-15T07:30","isBased":false},{"tail":"N672HG","arr":"2026-07-12T16:25","dep":"2026-07-12T09:20","isBased":false},{"tail":"VNA298","arr":"2026-07-12T15:30","dep":"2026-07-15T10:20","isBased":false},{"tail":"HALKW","arr":"2026-07-12T12:00","dep":"2026-07-15T18:00","isBased":false},{"tail":"N1303B","arr":"2026-07-12T14:46","dep":"2026-07-14T19:00","isBased":false},{"tail":"DANEO","arr":"2026-07-12T19:40","dep":"2026-07-14T23:00","isBased":false},{"tail":"N298AL","arr":"2026-07-13T09:00","dep":"2026-07-14T21:00","isBased":false},{"tail":"N600H","arr":"2026-07-13T11:21","dep":"2026-07-14T09:00","isBased":false},{"tail":"XA-RHL","arr":"2026-07-13T18:00","dep":"2026-08-15T09:00","isBased":false},{"tail":"N125YU","arr":"2026-07-13T14:30","dep":"2026-07-15T09:30","isBased":false},{"tail":"VNA488","arr":"2026-07-13T10:00","dep":"2026-07-14T21:00","isBased":false},{"tail":"VNA499","arr":"2026-07-13T21:00","dep":"2026-07-15T10:00","isBased":false},{"tail":"VNA799","arr":"2026-07-13T18:45","dep":"2026-07-15T10:00","isBased":false},{"tail":"N298AL","arr":"2026-07-13T16:05","dep":"2026-07-15T11:00","isBased":false},{"tail":"N18TM","arr":"2026-07-13T14:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N626Z","arr":"2026-07-13T17:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N777HN","arr":"2026-07-13T16:00","dep":"2026-07-16T12:00","isBased":false},{"tail":"VNA489","arr":"2026-07-13T18:45","dep":"2026-07-15T13:05","isBased":false},{"tail":"XARAA","arr":"2026-07-13T13:30","dep":"2026-07-14T20:00","isBased":false},{"tail":"XAAAN","arr":"2026-07-13T14:43","dep":"2026-07-15T17:00","isBased":false},{"tail":"N215BB","arr":"2026-07-13T15:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N813BB","arr":"2026-07-13T15:15","dep":"2026-07-13T16:15","isBased":false},{"tail":"N97DK","arr":"2026-07-14T18:00","dep":null,"isBased":true},{"tail":"N97DK","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N686CB","arr":"2026-07-14T07:45","dep":"2026-07-14T16:00","isBased":false},{"tail":"N342GV","arr":"2026-07-14T10:45","dep":"2026-07-15T08:00","isBased":false},{"tail":"XACCL","arr":"2026-07-14T15:40","dep":"2026-07-15T08:00","isBased":false},{"tail":"PRVCO","arr":"2026-07-14T10:00","dep":"2026-07-15T09:00","isBased":false},{"tail":"N537XJ","arr":"2026-07-14T09:45","dep":"2026-07-14T10:45","isBased":false},{"tail":"XARET","arr":"2026-07-14T10:00","dep":"2026-07-15T19:00","isBased":false},{"tail":"N837VA","arr":"2026-07-14T10:15","dep":"2026-07-15T11:50","isBased":false},{"tail":"VPCFR","arr":"2026-07-14T10:20","dep":"2026-07-14T17:00","isBased":false},{"tail":"VPCZB","arr":"2026-07-14T10:20","dep":"2026-07-14T17:00","isBased":false},{"tail":"N7DK","arr":"2026-07-14T10:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N28UD","arr":"2026-07-14T11:00","dep":"2026-07-14T15:48","isBased":false},{"tail":"N356VJ","arr":"2026-07-14T11:30","dep":"2026-07-14T13:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T11:35","dep":"2026-07-14T12:35","isBased":false},{"tail":"N58MW","arr":"2026-07-14T12:00","dep":"2026-07-14T18:00","isBased":false},{"tail":"CFASY","arr":"2026-07-14T17:00","dep":"2026-07-14T18:00","isBased":false},{"tail":"N672HG","arr":"2026-07-15T20:00","dep":"2026-07-14T17:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T17:30","dep":"2026-07-14T18:30","isBased":false},{"tail":"N132JE","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N358VJ","arr":"2026-07-14T18:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"CFJAS","arr":"2026-07-14T19:15","dep":"2026-07-14T20:15","isBased":false},{"tail":"N765M","arr":"2026-07-15T09:18","dep":"2026-07-16T07:00","isBased":false},{"tail":"N668TX","arr":"2026-07-15T07:45","dep":"2026-07-15T08:45","isBased":false},{"tail":"N350VJ","arr":"2026-07-15T10:00","dep":"2026-07-15T11:00","isBased":false},{"tail":"N285FA","arr":"2026-07-15T10:45","dep":"2026-07-16T14:00","isBased":false}];
+        const privateFlights = [{"tail":"N109JS","arr":"2026-06-22T21:30","dep":"2026-06-23T11:00","isBased":false},{"tail":"N199Y","arr":"2026-06-23T16:00","dep":"2026-06-23T17:00","isBased":false},{"tail":"N888JE","arr":"2026-06-23T16:00","dep":"2026-06-22T14:30","isBased":false},{"tail":"N8801C","arr":"2026-06-23T11:15","dep":"2026-06-25T11:00","isBased":false},{"tail":"N314CM","arr":"2026-06-23T15:00","dep":"2026-06-24T10:30","isBased":false},{"tail":"N130QS","arr":"2026-06-23T14:48","dep":"2026-06-24T06:00","isBased":false},{"tail":"N214BZ","arr":"2026-06-23T18:25","dep":"2026-06-23T19:25","isBased":false},{"tail":"N312HC","arr":"2026-06-23T09:30","dep":"2026-06-23T13:00","isBased":false},{"tail":"N836JS","arr":"2026-06-23T13:30","dep":"2026-06-23T15:00","isBased":false},{"tail":"N283PH","arr":"2026-06-23T18:44","dep":"2026-06-24T17:01","isBased":false},{"tail":"N893FX","arr":"2026-06-23T10:00","dep":"2026-06-23T11:00","isBased":false},{"tail":"N893FX","arr":"2026-06-23T15:20","dep":"2026-06-23T16:20","isBased":false},{"tail":"N736MG","arr":"2026-06-23T08:42","dep":"2026-06-23T15:30","isBased":false},{"tail":"XBEGD","arr":"2026-06-24T10:00","dep":"2026-06-28T15:00","isBased":false},{"tail":"N130JE","arr":"2026-06-24T16:35","dep":"2026-06-24T17:35","isBased":false},{"tail":"N267PT","arr":"2026-06-24T13:00","dep":"2026-06-28T10:00","isBased":false},{"tail":"N458TC","arr":"2026-06-24T07:40","dep":"2026-06-24T17:00","isBased":false},{"tail":"N126AF","arr":"2026-06-24T09:45","dep":"2026-06-24T10:30","isBased":false},{"tail":"VPCSY","arr":"2026-06-24T15:00","dep":"2026-06-26T13:00","isBased":false},{"tail":"N159WW","arr":"2026-06-24T16:30","dep":"2026-06-24T17:00","isBased":false},{"tail":"N883SJ","arr":"2026-06-24T13:00","dep":"2026-06-25T23:30","isBased":false},{"tail":"N71NF","arr":"2026-06-24T14:18","dep":"2026-06-25T11:11","isBased":false},{"tail":"N660P","arr":"2026-06-24T07:45","dep":"2026-06-24T11:00","isBased":false},{"tail":"N917HP","arr":"2026-06-24T13:48","dep":"2026-06-23T16:30","isBased":false},{"tail":"N367QS","arr":"2026-06-24T06:54","dep":"2026-06-24T07:54","isBased":false},{"tail":"N573QS","arr":"2026-06-24T12:30","dep":"2026-06-24T13:30","isBased":false},{"tail":"N478QS","arr":"2026-06-24T13:30","dep":"2026-06-24T14:30","isBased":false},{"tail":"N741VE","arr":"2026-06-25T17:18","dep":"2026-06-25T08:00","isBased":false},{"tail":"N672HG","arr":"2026-06-25T22:25","dep":null,"isBased":true},{"tail":"N109JS","arr":"2026-06-25T03:55","dep":"2026-06-25T05:25","isBased":false},{"tail":"N74DH","arr":"2026-06-25T10:15","dep":"2026-06-25T11:30","isBased":false},{"tail":"N242JX","arr":"2026-06-25T14:40","dep":"2026-06-25T15:00","isBased":false},{"tail":"N783MM","arr":"2026-06-25T15:15","dep":"2026-06-25T20:45","isBased":false},{"tail":"ALASKAAIRLINES","arr":"2026-06-25T18:15","dep":"2026-06-25T20:00","isBased":false},{"tail":"N627HG","arr":"2026-06-25T20:25","dep":"2026-06-24T12:00","isBased":false},{"tail":"N85JM","arr":"2026-06-25T13:34","dep":"2026-06-24T10:00","isBased":false},{"tail":"OYTAB","arr":"2026-06-25T11:25","dep":"2026-06-26T14:00","isBased":false},{"tail":"N3251K","arr":"2026-06-25T13:00","dep":"2026-06-26T10:00","isBased":false},{"tail":"N947AK","arr":"2026-06-25T18:15","dep":"2026-06-25T19:45","isBased":false},{"tail":"N1966H","arr":"2026-06-25T13:08","dep":"2026-06-26T09:17","isBased":false},{"tail":"N650HA","arr":"2026-06-25T16:00","dep":"2026-06-23T11:00","isBased":false},{"tail":"N294LC","arr":"2026-06-25T13:00","dep":"2026-06-26T08:00","isBased":false},{"tail":"N707MT","arr":"2026-06-25T12:36","dep":"2026-06-16T14:00","isBased":false},{"tail":"N660P","arr":"2026-06-25T19:00","dep":"2026-06-25T19:45","isBased":false},{"tail":"N453QS","arr":"2026-06-25T11:00","dep":"2026-06-25T12:00","isBased":false},{"tail":"N22616","arr":"2026-06-25T12:58","dep":"2026-06-25T14:00","isBased":false},{"tail":"XAMCT","arr":"2026-06-26T12:00","dep":"2026-06-26T14:00","isBased":false},{"tail":"N313AR","arr":"2026-06-26T14:13","dep":null,"isBased":true},{"tail":"N680LL","arr":"2026-06-26T18:00","dep":null,"isBased":true},{"tail":"N672HG","arr":"2026-06-26T02:50","dep":"2026-06-25T23:00","isBased":false},{"tail":"N218HF","arr":"2026-06-26T11:15","dep":"2026-06-27T12:00","isBased":false},{"tail":"N614SG","arr":"2026-06-26T17:30","dep":"2026-06-28T14:00","isBased":false},{"tail":"N91CJ","arr":"2026-06-26T16:15","dep":"2026-06-28T14:00","isBased":false},{"tail":"A7CGG","arr":"2026-06-27T20:00","dep":"2026-06-30T07:00","isBased":false},{"tail":"N244JE","arr":"2026-06-27T17:00","dep":"2026-06-28T00:00","isBased":false},{"tail":"N947AK","arr":"2026-06-27T21:30","dep":"2026-06-28T12:00","isBased":false},{"tail":"TGFOR","arr":"2026-06-27T11:00","dep":"2026-06-28T19:00","isBased":false},{"tail":"N851GK","arr":"2026-06-27T11:40","dep":"2026-06-27T12:30","isBased":false},{"tail":"N74DH","arr":"2026-06-28T12:45","dep":"2026-06-28T13:30","isBased":false},{"tail":"N7402","arr":"2026-06-28T14:30","dep":"2026-07-03T10:00","isBased":false},{"tail":"N680LL","arr":null,"dep":"2026-06-28T10:00","isBased":true},{"tail":"N661WD","arr":"2026-06-28T11:00","dep":"2026-06-28T12:00","isBased":false},{"tail":"N176DL","arr":"2026-06-30T17:00","dep":"2026-06-28T08:30","isBased":false},{"tail":"N31MW","arr":"2026-06-28T14:29","dep":"2026-07-01T08:00","isBased":false},{"tail":"N503KJ","arr":"2026-06-28T13:00","dep":"2026-07-01T17:00","isBased":false},{"tail":"N741VE","arr":"2026-07-05T17:42","dep":"2026-06-28T15:48","isBased":false},{"tail":"N917HP","arr":"2026-06-28T16:36","dep":"2026-06-26T08:00","isBased":false},{"tail":"N765MS","arr":"2026-06-29T11:48","dep":"2026-06-30T08:00","isBased":false},{"tail":"XAMCU","arr":"2026-06-29T13:35","dep":"2026-06-29T16:10","isBased":false},{"tail":"CGXNU","arr":"2026-06-29T17:37","dep":"2026-06-30T19:00","isBased":false},{"tail":"N85JM","arr":"2026-06-29T14:57","dep":"2026-06-29T11:00","isBased":false},{"tail":"N85JM","arr":"2026-06-29T10:36","dep":"2026-06-25T16:00","isBased":false},{"tail":"N125TK","arr":"2026-06-29T14:21","dep":"2026-06-26T10:00","isBased":false},{"tail":"N680LL","arr":"2026-06-30T22:00","dep":null,"isBased":true},{"tail":"CGXNU","arr":"2026-06-30T10:00","dep":"2026-07-01T12:00","isBased":false},{"tail":"N7DK","arr":"2026-06-30T10:37","dep":"2026-07-01T08:01","isBased":false},{"tail":"N686CB","arr":"2026-06-30T07:45","dep":"2026-06-30T08:30","isBased":false},{"tail":"N686CB","arr":"2026-06-30T15:25","dep":"2026-06-30T16:30","isBased":false},{"tail":"N686CB","arr":"2026-06-30T15:25","dep":"2026-06-30T16:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-03T07:00","dep":"2026-07-03T08:00","isBased":false},{"tail":"N7DK","arr":"2026-07-03T10:01","dep":"2026-07-03T11:01","isBased":false},{"tail":"N813BB","arr":"2026-07-01T10:00","dep":"2026-07-01T10:30","isBased":false},{"tail":"N813BB","arr":"2026-07-02T10:00","dep":"2026-07-02T10:30","isBased":false},{"tail":"N700JM","arr":"2026-07-05T13:14","dep":"2026-07-01T11:00","isBased":false},{"tail":"N371DB","arr":"2026-07-02T16:13","dep":null,"isBased":true},{"tail":"N390JS","arr":"2026-07-02T16:14","dep":null,"isBased":true},{"tail":"N15N","arr":"2026-07-02T15:11","dep":"2026-07-02T11:11","isBased":false},{"tail":"XAPLJ","arr":"2026-07-06T10:00","dep":"2026-07-06T22:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-06T19:15","dep":"2026-07-06T20:15","isBased":false},{"tail":"N813BB","arr":"2026-07-05T14:25","dep":"2026-07-05T15:00","isBased":false},{"tail":"N813BB","arr":"2026-07-06T15:15","dep":"2026-07-06T15:45","isBased":false},{"tail":"N280TD","arr":"2026-07-06T12:28","dep":"2026-07-06T07:45","isBased":false},{"tail":"N464C","arr":"2026-07-06T09:00","dep":"2026-07-07T20:00","isBased":false},{"tail":"N293CK","arr":"2026-07-06T13:00","dep":"2026-07-07T19:00","isBased":false},{"tail":"N851BM","arr":"2026-07-06T14:59","dep":"2026-07-07T19:00","isBased":false},{"tail":"N316GN","arr":"2026-07-05T13:23","dep":"2026-07-07T15:00","isBased":false},{"tail":"N1549E","arr":"2026-07-06T10:00","dep":"2026-07-06T18:00","isBased":false},{"tail":"N350VJ","arr":"2026-07-12T16:55","dep":"2026-07-12T17:55","isBased":false},{"tail":"N2619L","arr":"2026-07-13T13:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N537XJ","arr":"2026-07-14T09:45","dep":"2026-07-14T10:45","isBased":false},{"tail":"N7DK","arr":"2026-07-14T10:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N356VJ","arr":"2026-07-14T11:30","dep":"2026-07-14T13:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T11:35","dep":"2026-07-14T12:35","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T17:30","dep":"2026-07-14T18:30","isBased":false},{"tail":"N132JE","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N358VJ","arr":"2026-07-14T18:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N668TX","arr":"2026-07-15T07:45","dep":"2026-07-15T08:45","isBased":false},{"tail":"N350VJ","arr":"2026-07-15T10:00","dep":"2026-07-15T11:00","isBased":false},{"tail":"N600JT","arr":null,"dep":"2026-07-07T07:30","isBased":true},{"tail":"N898CB","arr":"2026-07-07T07:45","dep":"2026-07-07T16:00","isBased":false},{"tail":"N600JT","arr":"2026-07-08T11:18","dep":null,"isBased":true},{"tail":"N365LG","arr":"2026-07-08T12:45","dep":"2026-07-15T21:00","isBased":false},{"tail":"N813BB","arr":"2026-07-09T08:00","dep":"2026-07-09T09:00","isBased":false},{"tail":"PS-AVF","arr":"2026-07-10T18:05","dep":null,"isBased":true},{"tail":"N595CB","arr":"2026-07-10T07:45","dep":"2026-07-10T08:30","isBased":false},{"tail":"N595CB","arr":"2026-07-10T15:15","dep":"2026-07-10T16:00","isBased":false},{"tail":"N813BB","arr":"2026-07-11T15:15","dep":"2026-07-12T09:00","isBased":false},{"tail":"N7402","arr":"2026-07-12T15:12","dep":null,"isBased":true},{"tail":"N624GF","arr":"2026-07-12T13:45","dep":"2026-07-15T07:30","isBased":false},{"tail":"N672HG","arr":"2026-07-12T16:25","dep":"2026-07-12T09:20","isBased":false},{"tail":"VNA298","arr":"2026-07-12T15:30","dep":"2026-07-15T10:20","isBased":false},{"tail":"HALKW","arr":"2026-07-12T12:00","dep":"2026-07-15T18:00","isBased":false},{"tail":"N1303B","arr":"2026-07-12T14:46","dep":"2026-07-14T19:00","isBased":false},{"tail":"DANEO","arr":"2026-07-12T19:40","dep":"2026-07-14T23:00","isBased":false},{"tail":"N298AL","arr":"2026-07-13T09:00","dep":"2026-07-14T21:00","isBased":false},{"tail":"N600H","arr":"2026-07-13T11:21","dep":"2026-07-14T09:00","isBased":false},{"tail":"XA-RHL","arr":"2026-07-13T18:00","dep":"2026-08-15T09:00","isBased":false},{"tail":"N125YU","arr":"2026-07-13T14:30","dep":"2026-07-15T09:30","isBased":false},{"tail":"VNA488","arr":"2026-07-13T10:00","dep":"2026-07-14T21:00","isBased":false},{"tail":"VNA499","arr":"2026-07-13T21:00","dep":"2026-07-15T10:00","isBased":false},{"tail":"VNA799","arr":"2026-07-13T18:45","dep":"2026-07-15T10:00","isBased":false},{"tail":"N298AL","arr":"2026-07-13T16:05","dep":"2026-07-15T11:00","isBased":false},{"tail":"N18TM","arr":"2026-07-13T14:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N626Z","arr":"2026-07-13T17:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N777HN","arr":"2026-07-13T16:00","dep":"2026-07-16T12:00","isBased":false},{"tail":"VNA489","arr":"2026-07-13T18:45","dep":"2026-07-15T13:05","isBased":false},{"tail":"XARAA","arr":"2026-07-13T13:30","dep":"2026-07-14T20:00","isBased":false},{"tail":"XAAAN","arr":"2026-07-13T14:43","dep":"2026-07-15T17:00","isBased":false},{"tail":"N215BB","arr":"2026-07-13T15:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N813BB","arr":"2026-07-13T15:15","dep":"2026-07-13T16:15","isBased":false},{"tail":"N18TM","arr":"2026-07-12T14:00","dep":"2026-07-15T12:00","isBased":false},{"tail":"N97DK","arr":"2026-07-14T18:00","dep":null,"isBased":true},{"tail":"N97DK","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N686CB","arr":"2026-07-14T07:45","dep":"2026-07-14T16:00","isBased":false},{"tail":"N342GV","arr":"2026-07-14T10:45","dep":"2026-07-15T08:00","isBased":false},{"tail":"XACCL","arr":"2026-07-14T15:40","dep":"2026-07-15T08:00","isBased":false},{"tail":"PRVCO","arr":"2026-07-14T10:00","dep":"2026-07-15T09:00","isBased":false},{"tail":"N537XJ","arr":"2026-07-14T09:45","dep":"2026-07-14T10:45","isBased":false},{"tail":"XARET","arr":"2026-07-14T10:00","dep":"2026-07-15T19:00","isBased":false},{"tail":"N837VA","arr":"2026-07-14T10:15","dep":"2026-07-15T11:50","isBased":false},{"tail":"VPCFR","arr":"2026-07-14T10:20","dep":"2026-07-14T17:00","isBased":false},{"tail":"VPCZB","arr":"2026-07-14T10:20","dep":"2026-07-14T17:00","isBased":false},{"tail":"N7DK","arr":"2026-07-14T10:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"N28UD","arr":"2026-07-14T11:00","dep":"2026-07-14T15:48","isBased":false},{"tail":"N356VJ","arr":"2026-07-14T11:30","dep":"2026-07-14T13:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T11:35","dep":"2026-07-14T12:35","isBased":false},{"tail":"N58MW","arr":"2026-07-14T12:00","dep":"2026-07-14T18:00","isBased":false},{"tail":"CFASY","arr":"2026-07-14T17:00","dep":"2026-07-14T18:00","isBased":false},{"tail":"N672HG","arr":"2026-07-15T20:00","dep":"2026-07-14T17:00","isBased":false},{"tail":"N501VJ","arr":"2026-07-14T17:30","dep":"2026-07-14T18:30","isBased":false},{"tail":"N132JE","arr":"2026-07-14T18:00","dep":"2026-07-14T19:00","isBased":false},{"tail":"N358VJ","arr":"2026-07-14T18:30","dep":"2026-07-14T19:30","isBased":false},{"tail":"CFJAS","arr":"2026-07-14T19:15","dep":"2026-07-14T20:15","isBased":false},{"tail":"N765M","arr":"2026-07-15T09:18","dep":"2026-07-16T07:00","isBased":false},{"tail":"N668TX","arr":"2026-07-15T07:45","dep":"2026-07-15T08:45","isBased":false},{"tail":"N350VJ","arr":"2026-07-15T10:00","dep":"2026-07-15T11:00","isBased":false},{"tail":"N285FA","arr":"2026-07-15T10:45","dep":"2026-07-16T14:00","isBased":false}];
 
         const teamCharters = [
             {"tail": "TBD", "type": "Breeze A220", "arr": "2026-06-20T18:15", "dep": null, "team": "Sweden"},
@@ -420,7 +423,7 @@
 
         let currentChartInstance = null;
         let capChartInstance = null;
-        let selectedDateStr = "2026-06-24";
+        let selectedDateStr = "2026-06-25";
         let activeTab = 'overview';
         let actArr = [], actDep = [], fifaGrounded = [], actArrPax = [], actDepPax = [];
 
@@ -540,27 +543,42 @@
                     }
                 });
 
-            // Dynamic Match Card
+            // Dynamic Match Card (Official FIFA Schedule)
             const matchCard = document.getElementById('match-card-content');
             if (matchCard) {
                 const targetTime = new Date(`${targetDate}T00:00:00`).getTime();
-                const match25 = new Date('2026-06-25T00:00:00').getTime();
                 
-                if (targetTime > match25) {
-                    matchCard.innerHTML = `
-                        <img src="https://flagcdn.com/w20/jo.png" alt="JOR" class="w-5 shadow-sm rounded-sm"> JOR 
-                        <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
-                        <img src="https://flagcdn.com/w20/ar.png" alt="ARG" class="w-5 shadow-sm rounded-sm"> ARG
-                    `;
-                    document.getElementById('match-card-date').innerText = "Sat, June 27 @ 21:00 CDT";
-                } else {
-                    matchCard.innerHTML = `
-                        <img src="https://flagcdn.com/w20/jp.png" alt="JPN" class="w-5 shadow-sm rounded-sm"> JPN 
-                        <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
-                        <img src="https://flagcdn.com/w20/se.png" alt="SWE" class="w-5 shadow-sm rounded-sm"> SWE
-                    `;
-                    document.getElementById('match-card-date').innerText = "Thu, June 25 @ 18:00 CDT";
+                const matches = [
+                    { date: '2026-06-14', time: '15:00 CDT', home: 'NED', away: 'JPN', homeFlag: 'nl', awayFlag: 'jp' },
+                    { date: '2026-06-17', time: '15:00 CDT', home: 'ENG', away: 'CRO', homeFlag: 'gb-eng', awayFlag: 'hr' },
+                    { date: '2026-06-22', time: '12:00 CDT', home: 'ARG', away: 'AUT', homeFlag: 'ar', awayFlag: 'at' },
+                    { date: '2026-06-25', time: '18:00 CDT', home: 'JPN', away: 'SWE', homeFlag: 'jp', awayFlag: 'se' },
+                    { date: '2026-06-27', time: '21:00 CDT', home: 'JOR', away: 'ARG', homeFlag: 'jo', awayFlag: 'ar' },
+                    { date: '2026-06-30', time: '12:00 CDT', home: 'TBD', away: 'TBD', homeFlag: 'un', awayFlag: 'un' }
+                ];
+                
+                let nextMatch = matches[matches.length - 1];
+                for (let m of matches) {
+                    if (new Date(`${m.date}T00:00:00`).getTime() >= targetTime) {
+                        nextMatch = m;
+                        break;
+                    }
                 }
+                
+                let homeImg = nextMatch.homeFlag !== 'un' ? `<img src="https://flagcdn.com/w20/${nextMatch.homeFlag}.png" alt="${nextMatch.home}" class="w-5 shadow-sm rounded-sm">` : '🛡️';
+                let awayImg = nextMatch.awayFlag !== 'un' ? `<img src="https://flagcdn.com/w20/${nextMatch.awayFlag}.png" alt="${nextMatch.away}" class="w-5 shadow-sm rounded-sm">` : '🛡️';
+
+                matchCard.innerHTML = `
+                    ${homeImg} ${nextMatch.home} 
+                    <span class="text-slate-500 text-sm font-medium mx-1">vs</span> 
+                    ${awayImg} ${nextMatch.away}
+                `;
+                
+                const parts = nextMatch.date.split('-');
+                const matchDateObj = new Date(parts[0], parts[1]-1, parts[2]);
+                const dateString = matchDateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                
+                document.getElementById('match-card-date').innerText = `${dateString} @ ${nextMatch.time}`;
             }
 
             let tableHtml = "";
@@ -739,7 +757,6 @@
             Chart.defaults.font.family = 'Inter';
             Chart.defaults.color = '#94a3b8';
             initDashboard();
-            simulateSkyTheme();
         };
     </script>
 </body>
